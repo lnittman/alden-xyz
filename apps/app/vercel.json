@@ -1,7 +1,7 @@
 {
   "framework": "nextjs",
-  "buildCommand": "cd ../.. && bun run build --filter=@repo/app",
+  "buildCommand": "bun run build",
   "devCommand": "bun dev",
-  "installCommand": "cd ../.. && bun install",
+  "installCommand": "bun install",
   "outputDirectory": ".next"
 }
