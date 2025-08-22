@@ -1,6 +1,8 @@
 {
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
   "framework": null,
-  "buildCommand": "bun run build --filter=@repo/app",
-  "installCommand": "bun install",
-  "outputDirectory": "apps/app/.next"
+  "outputDirectory": null,
+  "rootDirectory": "apps/app",
+  "ignoreCommand": "npx turbo-ignore"
 }
