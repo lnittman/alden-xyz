@@ -26,13 +26,13 @@ bucket_name = "alden-media"
 # KV Namespaces for caching and sessions
 [[kv_namespaces]]
 binding = "CACHE_KV"
-id = "your-cache-kv-id"
-preview_id = "your-cache-kv-preview-id"
+id = "152d80b4a2ae48c5b54c09455ed2929d"
+preview_id = "152d80b4a2ae48c5b54c09455ed2929d"
 
 [[kv_namespaces]]
 binding = "SESSION_KV"
-id = "your-session-kv-id"
-preview_id = "your-session-kv-preview-id"
+id = "77449b8ba1cd4fa8b0864d709e57ba1b"
+preview_id = "77449b8ba1cd4fa8b0864d709e57ba1b"
 
 # Durable Objects for real-time features
 [durable_objects]
@@ -42,7 +42,7 @@ bindings = [
 
 [[migrations]]
 tag = "v1"
-new_classes = ["ChatRoom"]
+new_sqlite_classes = ["ChatRoom"]
 
 # Observability
 [observability]
