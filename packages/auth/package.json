@@ -1,0 +1,40 @@
+{
+  "name": "@repo/auth",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": "./index.ts",
+    "./client": "./client.ts",
+    "./server": "./server.ts",
+    "./server-types": "./server-types.ts",
+    "./middleware": "./middleware.ts",
+    "./provider": "./provider.tsx",
+    "./keys": "./keys.ts",
+    "./utils": "./utils/index.ts",
+    "./webhooks/clerk": "./webhooks/clerk.ts",
+    "./components/*": "./components/*"
+  },
+  "scripts": {
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "@clerk/elements": "^0.23.21",
+    "@clerk/nextjs": "^6.18.4",
+    "@clerk/themes": "^2.2.39",
+    "lucide-react": "^0.539.0",
+    "next-themes": "^0.4.6",
+    "react": "^19.1.0"
+  },
+  "devDependencies": {
+    "@clerk/types": "^4.53.0",
+    "@types/node": "22.14.1",
+    "@types/react": "19.0.6",
+    "@types/react-dom": "^19.0.3",
+    "svix": "^1.44.0",
+    "typescript": "^5.8.3",
+    "@repo/database": "workspace:*",
+    "@repo/logger": "workspace:*",
+    "@repo/typescript-config": "workspace:*"
+  }
+}

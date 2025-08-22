@@ -1,0 +1,29 @@
+# Migrate Authentication from Supabase to Clerk
+
+You are working on the Alden messaging platform in a turborepo monorepo. 
+
+## Task: Create the auth package and setup Clerk authentication
+
+1. Create packages/auth directory with proper structure
+2. Install Clerk dependencies: @clerk/nextjs @clerk/clerk-sdk-node @clerk/types
+3. Create auth package files:
+   - package.json with Clerk dependencies
+   - src/index.ts exporting Clerk utilities
+   - src/clerk-provider.tsx with ClerkProvider wrapper
+   - src/hooks.ts with useAuth and useUser hooks
+   - src/helpers.ts with getAuthUser and requireAuth functions
+
+4. Update apps/app/src/middleware.ts to use Clerk middleware
+5. Create auth pages in apps/app/src/app/(auth)/
+   - sign-in/[[...sign-in]]/page.tsx
+   - sign-up/[[...sign-up]]/page.tsx
+
+6. Update apps/app/src/app/layout.tsx to wrap with ClerkProvider
+
+IMPORTANT: 
+- Use bun as package manager
+- Follow existing patterns in the codebase
+- The marketing page already uses Clerk (see apps/app/src/app/(marketing)/page.tsx)
+- Use workspace:* for internal dependencies
+
+Start by creating the packages/auth structure.

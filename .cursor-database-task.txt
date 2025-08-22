@@ -1,0 +1,41 @@
+# Database Migration Task - Implement Drizzle ORM
+
+## Context
+You're working on the Alden messaging platform. The database package structure already exists at packages/database, but needs to be properly implemented with Drizzle ORM.
+
+## Task: Create the Drizzle ORM database schema
+
+1. **Install Drizzle dependencies in packages/database:**
+   - drizzle-orm
+   - postgres
+   - drizzle-kit (dev dependency)
+   - @types/pg (dev dependency)
+
+2. **Create the schema files in packages/database/src/schema:**
+   - users.ts - User tables (synced with Clerk)
+   - chats.ts - Chat and chat members tables
+   - messages.ts - Messages, attachments, reactions, reads
+   - references.ts - Reference and reference items tables
+   - relations.ts - All table relations
+   - index.ts - Export all schemas
+
+3. **Create the database client in packages/database/src/client.ts:**
+   - Set up Drizzle with PostgreSQL
+   - Export db instance
+
+4. **Create drizzle.config.ts in packages/database:**
+   - Configure for PostgreSQL
+   - Point to schema files
+   - Set up migrations directory
+
+5. **Update packages/database/src/index.ts:**
+   - Export all schemas, client, and types
+
+## Key Requirements:
+- Use bun as package manager
+- PostgreSQL with Drizzle ORM
+- Tables should support chat/messaging functionality
+- Include proper TypeScript types
+- Follow existing project patterns
+
+Start by installing the required dependencies.

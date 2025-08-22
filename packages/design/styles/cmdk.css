@@ -1,0 +1,114 @@
+/* Command menu (cmdk) styles */
+[cmdk-root] {
+  max-width: 640px;
+  width: 100%;
+  max-height: 400px;
+  overflow: hidden;
+  transition: opacity 100ms ease;
+  position: relative;
+  z-index: 50;
+}
+
+[cmdk-input] {
+  font-size: 0.875rem;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  border-radius: 0;
+  caret-color: var(--color-primary);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+[cmdk-input]::placeholder {
+  color: var(--color-muted-foreground);
+}
+
+[cmdk-list] {
+  max-height: 300px;
+  overflow: auto;
+  padding: 0;
+  transition: 100ms ease;
+  transition-property: height;
+}
+
+[cmdk-list] [cmdk-empty] {
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  white-space: pre-wrap;
+  color: var(--color-muted-foreground);
+}
+
+[cmdk-group] {
+  padding: 0.5rem 0;
+}
+
+[cmdk-group]:not(:first-child) {
+  border-top: 1px solid var(--color-border);
+}
+
+[cmdk-group-heading] {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-muted-foreground);
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.25rem;
+}
+
+[cmdk-item] {
+  cursor: pointer;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 1rem;
+  color: var(--color-foreground);
+  font-size: 0.875rem;
+  position: relative;
+  transition: all 100ms ease;
+  transition-property: background-color, color;
+}
+
+[cmdk-item]:hover {
+  background-color: var(--color-accent);
+}
+
+[cmdk-item][data-selected="true"] {
+  background-color: var(--color-accent);
+  color: var(--color-accent-foreground);
+}
+
+[cmdk-item][data-disabled="true"] {
+  color: var(--color-muted-foreground);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+[cmdk-item] svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+[cmdk-separator] {
+  height: 1px;
+  width: 100%;
+  background: var(--color-border);
+  margin: 0.25rem 0;
+}
+
+[cmdk-loading] {
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  color: var(--color-muted-foreground);
+}

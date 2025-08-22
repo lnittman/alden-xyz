@@ -1,0 +1,1 @@
+This folder contains the built output assets for the worker "squish-api" generated at 2025-08-09T06:22:33.931Z.

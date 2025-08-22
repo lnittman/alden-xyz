@@ -1,0 +1,48 @@
+{
+  "name": "@repo/orpc",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./server": "./dist/server.js",
+    "./client": "./dist/client.js",
+    "./context": "./dist/context.js",
+    "./router": "./dist/router.js",
+    "./openapi": "./dist/openapi.js",
+    "./adapters/next": "./dist/adapters/next.js",
+    "./adapters/hono": "./dist/adapters/hono.js",
+    "./adapters/openapi": "./dist/adapters/openapi.js",
+    "./hooks/swr": "./dist/hooks/swr.js",
+    "./actions": "./dist/actions.js"
+  },
+  "scripts": {
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^6.19.5",
+    "@orpc/client": "^1.7.6",
+    "@orpc/openapi": "^1.7.6",
+    "@orpc/react": "^1.7.6",
+    "@orpc/server": "^1.7.6",
+    "@orpc/zod": "^1.7.6",
+    "@repo/auth": "workspace:*",
+    "@repo/database": "workspace:*",
+    "@repo/services": "workspace:*",
+    "swr": "^2.2.5",
+    "zod": "^3.25.28"
+  },
+  "devDependencies": {
+    "@repo/testing": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@vitest/ui": "^3.1.4",
+    "typescript": "^5.9.2",
+    "vitest": "^3.1.4"
+  }
+}

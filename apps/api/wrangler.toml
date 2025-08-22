@@ -1,0 +1,51 @@
+name = "alden-api"
+main = "src/index.ts"
+compatibility_date = "2025-04-01"
+
+# Compatibility flags required for database drivers
+compatibility_flags = ["nodejs_compat"]
+
+# Environment variables
+[vars]
+NODE_ENV = "production"
+AI_SERVICE_URL = "https://black-young-motherboard.mastra.cloud"
+NEXT_PUBLIC_APP_URL = "https://alden.xyz"
+STORAGE_PROVIDER = "r2"
+R2_ACCOUNT_ID = "ace708c6a8408e0711aac868ccb94a82"
+R2_BUCKET_NAME = "alden-assets"
+
+# R2 bucket binding
+[[r2_buckets]]
+binding = "ASSETS_BUCKET"
+bucket_name = "alden-assets"
+
+# Observability
+[observability]
+enabled = true
+
+[observability.logs]
+enabled = true
+
+# Routes - to be configured after deployment
+# [[routes]]
+# pattern = "api.alden.xyz"
+# custom_domain = true
+
+# Note: Sensitive environment variables should be set via wrangler secrets:
+# wrangler secret put DATABASE_URL
+# wrangler secret put CLERK_SECRET_KEY
+# wrangler secret put CLERK_PUBLISHABLE_KEY
+# wrangler secret put REDIS_URL
+# wrangler secret put SENTRY_DSN
+# wrangler secret put VERTEX_AI_PROJECT
+# wrangler secret put VERTEX_AI_LOCATION
+# wrangler secret put GOOGLE_APPLICATION_CREDENTIALS
+# wrangler secret put RESEND_API_KEY
+# wrangler secret put PUSHER_APP_ID
+# wrangler secret put PUSHER_KEY
+# wrangler secret put PUSHER_SECRET
+# wrangler secret put PUSHER_CLUSTER
+# wrangler secret put R2_ACCOUNT_ID
+# wrangler secret put R2_ACCESS_KEY_ID
+# wrangler secret put R2_SECRET_ACCESS_KEY
+# wrangler secret put R2_BUCKET_NAME
