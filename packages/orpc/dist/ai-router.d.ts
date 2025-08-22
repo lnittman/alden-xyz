@@ -8,10 +8,10 @@ export declare const aiBatchRouter: {
         fields: z.ZodOptional<z.ZodArray<z.ZodEnum<["id", "name", "description", "icon", "visibility", "assetCount", "ownerId", "createdAt", "updatedAt"]>, "many">>;
     }, "strip", z.ZodTypeAny, {
         boardIds: string[];
-        fields?: ("id" | "name" | "createdAt" | "updatedAt" | "visibility" | "description" | "icon" | "assetCount" | "ownerId")[] | undefined;
+        fields?: ("name" | "description" | "id" | "createdAt" | "updatedAt" | "icon" | "visibility" | "assetCount" | "ownerId")[] | undefined;
     }, {
         boardIds: string[];
-        fields?: ("id" | "name" | "createdAt" | "updatedAt" | "visibility" | "description" | "icon" | "assetCount" | "ownerId")[] | undefined;
+        fields?: ("name" | "description" | "id" | "createdAt" | "updatedAt" | "icon" | "visibility" | "assetCount" | "ownerId")[] | undefined;
     }>, import("@orpc/contract").Schema<{
         boards: any[];
     }, {
@@ -67,25 +67,25 @@ export declare const aiSearchRouter: {
                 start: z.ZodOptional<z.ZodString>;
                 end: z.ZodOptional<z.ZodString>;
             }, "strip", z.ZodTypeAny, {
-                end?: string | undefined;
                 start?: string | undefined;
+                end?: string | undefined;
             }, {
-                end?: string | undefined;
                 start?: string | undefined;
+                end?: string | undefined;
             }>>;
         }, "strip", z.ZodTypeAny, {
             boardIds?: string[] | undefined;
             assetTypes?: string[] | undefined;
             dateRange?: {
-                end?: string | undefined;
                 start?: string | undefined;
+                end?: string | undefined;
             } | undefined;
         }, {
             boardIds?: string[] | undefined;
             assetTypes?: string[] | undefined;
             dateRange?: {
-                end?: string | undefined;
                 start?: string | undefined;
+                end?: string | undefined;
             } | undefined;
         }>>;
         limit: z.ZodDefault<z.ZodNumber>;
@@ -93,43 +93,43 @@ export declare const aiSearchRouter: {
     }, "strip", z.ZodTypeAny, {
         query: string;
         limit: number;
-        searchType: "boards" | "assets" | "all" | "users";
+        searchType: "boards" | "assets" | "users" | "all";
         threshold: number;
+        embeddings?: number[] | undefined;
         filters?: {
             boardIds?: string[] | undefined;
             assetTypes?: string[] | undefined;
             dateRange?: {
-                end?: string | undefined;
                 start?: string | undefined;
+                end?: string | undefined;
             } | undefined;
         } | undefined;
-        embeddings?: number[] | undefined;
     }, {
         query: string;
+        limit?: number | undefined;
+        embeddings?: number[] | undefined;
+        searchType?: "boards" | "assets" | "users" | "all" | undefined;
         filters?: {
             boardIds?: string[] | undefined;
             assetTypes?: string[] | undefined;
             dateRange?: {
-                end?: string | undefined;
                 start?: string | undefined;
+                end?: string | undefined;
             } | undefined;
         } | undefined;
-        limit?: number | undefined;
-        embeddings?: number[] | undefined;
-        searchType?: "boards" | "assets" | "all" | "users" | undefined;
         threshold?: number | undefined;
     }>, import("@orpc/contract").Schema<{
         results: any[];
         metadata: {
             totalResults: number;
-            searchType: "boards" | "assets" | "all" | "users";
+            searchType: "boards" | "assets" | "users" | "all";
             threshold: number;
         };
     }, {
         results: any[];
         metadata: {
             totalResults: number;
-            searchType: "boards" | "assets" | "all" | "users";
+            searchType: "boards" | "assets" | "users" | "all";
             threshold: number;
         };
     }>, import("@orpc/contract").MergedErrorMap<Record<never, never>, Record<never, never>>, Record<never, never>>;
@@ -167,12 +167,12 @@ export declare const aiAnalyticsRouter: {
     }, "strip", z.ZodTypeAny, {
         entityType: "user" | "board" | "asset";
         entityId: string;
-        metrics: ("collaboration" | "engagement" | "growth" | "quality" | "trends")[];
+        metrics: ("engagement" | "growth" | "quality" | "collaboration" | "trends")[];
         timeframe: "1d" | "7d" | "30d" | "90d";
     }, {
         entityType: "user" | "board" | "asset";
         entityId: string;
-        metrics?: ("collaboration" | "engagement" | "growth" | "quality" | "trends")[] | undefined;
+        metrics?: ("engagement" | "growth" | "quality" | "collaboration" | "trends")[] | undefined;
         timeframe?: "1d" | "7d" | "30d" | "90d" | undefined;
     }>, import("@orpc/contract").Schema<{
         insights: any;
@@ -192,9 +192,9 @@ export declare const aiAnalyticsRouter: {
         timeframe: "7d" | "1h" | "24h";
         category?: "boards" | "assets" | "topics" | undefined;
     }, {
-        category?: "boards" | "assets" | "topics" | undefined;
         limit?: number | undefined;
         timeframe?: "7d" | "1h" | "24h" | undefined;
+        category?: "boards" | "assets" | "topics" | undefined;
     }>, import("@orpc/contract").Schema<{
         trending: any;
     }, {
@@ -222,9 +222,9 @@ export declare const aiRecommendationRouter: {
         }>>;
         limit: z.ZodDefault<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
-        userId: string;
         limit: number;
-        recommendationType: "boards" | "assets" | "collaborators" | "topics";
+        userId: string;
+        recommendationType: "boards" | "assets" | "topics" | "collaborators";
         context?: {
             currentBoardId?: string | undefined;
             recentInteractions?: string[] | undefined;
@@ -232,7 +232,7 @@ export declare const aiRecommendationRouter: {
         } | undefined;
     }, {
         userId: string;
-        recommendationType: "boards" | "assets" | "collaborators" | "topics";
+        recommendationType: "boards" | "assets" | "topics" | "collaborators";
         limit?: number | undefined;
         context?: {
             currentBoardId?: string | undefined;
@@ -254,10 +254,10 @@ export declare const aiRecommendationRouter: {
         method: z.ZodDefault<z.ZodEnum<["user_based", "item_based", "hybrid"]>>;
         limit: z.ZodDefault<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
-        userId: string;
         limit: number;
-        method: "user_based" | "item_based" | "hybrid";
+        userId: string;
         itemType: "boards" | "assets";
+        method: "user_based" | "item_based" | "hybrid";
     }, {
         userId: string;
         itemType: "boards" | "assets";
@@ -278,10 +278,10 @@ export declare const aiRouter: {
             fields: z.ZodOptional<z.ZodArray<z.ZodEnum<["id", "name", "description", "icon", "visibility", "assetCount", "ownerId", "createdAt", "updatedAt"]>, "many">>;
         }, "strip", z.ZodTypeAny, {
             boardIds: string[];
-            fields?: ("id" | "name" | "createdAt" | "updatedAt" | "visibility" | "description" | "icon" | "assetCount" | "ownerId")[] | undefined;
+            fields?: ("name" | "description" | "id" | "createdAt" | "updatedAt" | "icon" | "visibility" | "assetCount" | "ownerId")[] | undefined;
         }, {
             boardIds: string[];
-            fields?: ("id" | "name" | "createdAt" | "updatedAt" | "visibility" | "description" | "icon" | "assetCount" | "ownerId")[] | undefined;
+            fields?: ("name" | "description" | "id" | "createdAt" | "updatedAt" | "icon" | "visibility" | "assetCount" | "ownerId")[] | undefined;
         }>, import("@orpc/contract").Schema<{
             boards: any[];
         }, {
@@ -337,25 +337,25 @@ export declare const aiRouter: {
                     start: z.ZodOptional<z.ZodString>;
                     end: z.ZodOptional<z.ZodString>;
                 }, "strip", z.ZodTypeAny, {
-                    end?: string | undefined;
                     start?: string | undefined;
+                    end?: string | undefined;
                 }, {
-                    end?: string | undefined;
                     start?: string | undefined;
+                    end?: string | undefined;
                 }>>;
             }, "strip", z.ZodTypeAny, {
                 boardIds?: string[] | undefined;
                 assetTypes?: string[] | undefined;
                 dateRange?: {
-                    end?: string | undefined;
                     start?: string | undefined;
+                    end?: string | undefined;
                 } | undefined;
             }, {
                 boardIds?: string[] | undefined;
                 assetTypes?: string[] | undefined;
                 dateRange?: {
-                    end?: string | undefined;
                     start?: string | undefined;
+                    end?: string | undefined;
                 } | undefined;
             }>>;
             limit: z.ZodDefault<z.ZodNumber>;
@@ -363,43 +363,43 @@ export declare const aiRouter: {
         }, "strip", z.ZodTypeAny, {
             query: string;
             limit: number;
-            searchType: "boards" | "assets" | "all" | "users";
+            searchType: "boards" | "assets" | "users" | "all";
             threshold: number;
+            embeddings?: number[] | undefined;
             filters?: {
                 boardIds?: string[] | undefined;
                 assetTypes?: string[] | undefined;
                 dateRange?: {
-                    end?: string | undefined;
                     start?: string | undefined;
+                    end?: string | undefined;
                 } | undefined;
             } | undefined;
-            embeddings?: number[] | undefined;
         }, {
             query: string;
+            limit?: number | undefined;
+            embeddings?: number[] | undefined;
+            searchType?: "boards" | "assets" | "users" | "all" | undefined;
             filters?: {
                 boardIds?: string[] | undefined;
                 assetTypes?: string[] | undefined;
                 dateRange?: {
-                    end?: string | undefined;
                     start?: string | undefined;
+                    end?: string | undefined;
                 } | undefined;
             } | undefined;
-            limit?: number | undefined;
-            embeddings?: number[] | undefined;
-            searchType?: "boards" | "assets" | "all" | "users" | undefined;
             threshold?: number | undefined;
         }>, import("@orpc/contract").Schema<{
             results: any[];
             metadata: {
                 totalResults: number;
-                searchType: "boards" | "assets" | "all" | "users";
+                searchType: "boards" | "assets" | "users" | "all";
                 threshold: number;
             };
         }, {
             results: any[];
             metadata: {
                 totalResults: number;
-                searchType: "boards" | "assets" | "all" | "users";
+                searchType: "boards" | "assets" | "users" | "all";
                 threshold: number;
             };
         }>, import("@orpc/contract").MergedErrorMap<Record<never, never>, import("@orpc/contract").MergedErrorMap<Record<never, never>, Record<never, never>>>, Record<never, never>>;
@@ -437,12 +437,12 @@ export declare const aiRouter: {
         }, "strip", z.ZodTypeAny, {
             entityType: "user" | "board" | "asset";
             entityId: string;
-            metrics: ("collaboration" | "engagement" | "growth" | "quality" | "trends")[];
+            metrics: ("engagement" | "growth" | "quality" | "collaboration" | "trends")[];
             timeframe: "1d" | "7d" | "30d" | "90d";
         }, {
             entityType: "user" | "board" | "asset";
             entityId: string;
-            metrics?: ("collaboration" | "engagement" | "growth" | "quality" | "trends")[] | undefined;
+            metrics?: ("engagement" | "growth" | "quality" | "collaboration" | "trends")[] | undefined;
             timeframe?: "1d" | "7d" | "30d" | "90d" | undefined;
         }>, import("@orpc/contract").Schema<{
             insights: any;
@@ -462,9 +462,9 @@ export declare const aiRouter: {
             timeframe: "7d" | "1h" | "24h";
             category?: "boards" | "assets" | "topics" | undefined;
         }, {
-            category?: "boards" | "assets" | "topics" | undefined;
             limit?: number | undefined;
             timeframe?: "7d" | "1h" | "24h" | undefined;
+            category?: "boards" | "assets" | "topics" | undefined;
         }>, import("@orpc/contract").Schema<{
             trending: any;
         }, {
@@ -492,9 +492,9 @@ export declare const aiRouter: {
             }>>;
             limit: z.ZodDefault<z.ZodNumber>;
         }, "strip", z.ZodTypeAny, {
-            userId: string;
             limit: number;
-            recommendationType: "boards" | "assets" | "collaborators" | "topics";
+            userId: string;
+            recommendationType: "boards" | "assets" | "topics" | "collaborators";
             context?: {
                 currentBoardId?: string | undefined;
                 recentInteractions?: string[] | undefined;
@@ -502,7 +502,7 @@ export declare const aiRouter: {
             } | undefined;
         }, {
             userId: string;
-            recommendationType: "boards" | "assets" | "collaborators" | "topics";
+            recommendationType: "boards" | "assets" | "topics" | "collaborators";
             limit?: number | undefined;
             context?: {
                 currentBoardId?: string | undefined;
@@ -524,10 +524,10 @@ export declare const aiRouter: {
             method: z.ZodDefault<z.ZodEnum<["user_based", "item_based", "hybrid"]>>;
             limit: z.ZodDefault<z.ZodNumber>;
         }, "strip", z.ZodTypeAny, {
-            userId: string;
             limit: number;
-            method: "user_based" | "item_based" | "hybrid";
+            userId: string;
             itemType: "boards" | "assets";
+            method: "user_based" | "item_based" | "hybrid";
         }, {
             userId: string;
             itemType: "boards" | "assets";

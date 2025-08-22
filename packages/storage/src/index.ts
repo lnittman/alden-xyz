@@ -17,5 +17,8 @@ export { R2StorageProvider } from './providers/r2';
 export { VercelBlobProvider } from './providers/vercel-blob';
 export { GCSStorageProvider } from './providers/gcs';
 
+// Export R2 helpers
+export * from './utils/r2-helpers';
+
 // Export environment validation
 export { storage as storageEnv } from './env';

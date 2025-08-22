@@ -64,9 +64,12 @@
         "@orpc/server": "^1.7.5",
         "@repo/analytics": "workspace:*",
         "@repo/auth": "workspace:*",
+        "@repo/cache": "workspace:*",
         "@repo/database": "workspace:*",
         "@repo/orpc": "workspace:*",
+        "@repo/realtime": "workspace:*",
         "@repo/services": "workspace:*",
+        "@repo/storage": "workspace:*",
         "hono": "^4.6.15",
         "pusher": "^5.2.0",
         "resend": "^4.0.1",
@@ -221,6 +224,18 @@
         "@types/react-dom": "^19.0.3",
         "svix": "^1.44.0",
         "typescript": "^5.8.3",
+      },
+    },
+    "packages/cache": {
+      "name": "@repo/cache",
+      "version": "0.1.0",
+      "dependencies": {
+        "@repo/logger": "workspace:*",
+      },
+      "devDependencies": {
+        "@cloudflare/workers-types": "^4.20241127.0",
+        "@repo/typescript-config": "workspace:*",
+        "typescript": "^5.7.2",
       },
     },
     "packages/collaboration": {
@@ -409,6 +424,20 @@
         "@vitest/ui": "^3.1.4",
         "typescript": "^5.9.2",
         "vitest": "^3.1.4",
+      },
+    },
+    "packages/realtime": {
+      "name": "@repo/realtime",
+      "version": "0.1.0",
+      "dependencies": {
+        "@repo/logger": "workspace:*",
+      },
+      "devDependencies": {
+        "@cloudflare/workers-types": "^4.20241127.0",
+        "@repo/typescript-config": "workspace:*",
+        "pusher": "^5.2.0",
+        "pusher-js": "^8.4.0-rc2",
+        "typescript": "^5.7.2",
       },
     },
     "packages/services": {
@@ -1430,6 +1459,8 @@
 
     "@repo/auth": ["@repo/auth@workspace:packages/auth"],
 
+    "@repo/cache": ["@repo/cache@workspace:packages/cache"],
+
     "@repo/collaboration": ["@repo/collaboration@workspace:packages/collaboration"],
 
     "@repo/database": ["@repo/database@workspace:packages/database"],
@@ -1443,6 +1474,8 @@
     "@repo/notifications": ["@repo/notifications@workspace:packages/notifications"],
 
     "@repo/orpc": ["@repo/orpc@workspace:packages/orpc"],
+
+    "@repo/realtime": ["@repo/realtime@workspace:packages/realtime"],
 
     "@repo/services": ["@repo/services@workspace:packages/services"],
 

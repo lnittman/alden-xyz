@@ -1,0 +1,24 @@
+{
+  "name": "@repo/realtime",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./providers/durable-objects": "./src/providers/durable-objects.ts",
+    "./providers/pusher": "./src/providers/pusher.ts"
+  },
+  "scripts": {
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@repo/logger": "workspace:*"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241127.0",
+    "@repo/typescript-config": "workspace:*",
+    "pusher": "^5.2.0",
+    "pusher-js": "^8.4.0-rc2",
+    "typescript": "^5.7.2"
+  }
+}

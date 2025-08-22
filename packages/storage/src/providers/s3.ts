@@ -22,6 +22,7 @@ export class S3StorageProvider implements StorageProvider {
     bucket: string;
     endpoint?: string; // For S3-compatible services
     publicUrl?: string;
+    forcePathStyle?: boolean; // For S3-compatible services like R2
   }) {
     this.client = new S3Client({
       region: config.region,
@@ -30,6 +31,7 @@ export class S3StorageProvider implements StorageProvider {
         secretAccessKey: config.secretAccessKey,
       },
       endpoint: config.endpoint,
+      forcePathStyle: config.forcePathStyle,
     });
 
     this.bucket = config.bucket;

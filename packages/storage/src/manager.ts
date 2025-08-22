@@ -20,9 +20,24 @@ export class StorageManager {
   }
 
   private createProvider(): StorageProvider {
-    const provider = process.env.STORAGE_PROVIDER;
+    const provider = process.env.STORAGE_PROVIDER || 'r2'; // Default to R2
 
     switch (provider) {
+      case 'r2':
+        // R2 is the primary provider for Cloudflare deployments
+        if (!process.env.R2_ACCOUNT_ID || !process.env.R2_ACCESS_KEY_ID) {
+          logger.warn('R2 credentials not configured, falling back to no-op provider');
+          return this.getNoOpProvider();
+        }
+        return new R2StorageProvider({
+          accountId: process.env.R2_ACCOUNT_ID,
+          accessKeyId: process.env.R2_ACCESS_KEY_ID,
+          secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
+          bucket: process.env.R2_BUCKET || 'alden-media',
+          publicUrl: process.env.R2_PUBLIC_URL,
+          customDomain: process.env.R2_CUSTOM_DOMAIN,
+        });
+
       case 's3':
         return new S3StorageProvider({
           region: process.env.AWS_REGION!,
@@ -30,15 +45,6 @@ export class StorageManager {
           secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
           bucket: process.env.AWS_BUCKET!,
           publicUrl: process.env.AWS_PUBLIC_URL,
-        });
-
-      case 'r2':
-        return new R2StorageProvider({
-          accountId: process.env.R2_ACCOUNT_ID!,
-          accessKeyId: process.env.R2_ACCESS_KEY_ID!,
-          secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
-          bucket: process.env.R2_BUCKET!,
-          publicUrl: process.env.R2_PUBLIC_URL,
         });
 
       case 'vercel-blob':
@@ -55,29 +61,44 @@ export class StorageManager {
         });
 
       default:
-        // Return a no-op provider if no storage provider is configured
-        logger.warn('No storage provider configured, using no-op provider');
-        return {
-          async upload() {
-            throw new Error('Storage provider not configured');
-          },
-          async get() {
-            return null;
-          },
-          async delete() {
-            // No-op
-          },
-          getUrl() {
-            return '';
-          },
-          async list() {
-            return [];
-          },
-          async createPresignedUrl() {
-            throw new Error('Storage provider not configured');
-          },
-        } as StorageProvider;
+        logger.warn(`Unknown storage provider: ${provider}, defaulting to R2`);
+        // Try to use R2 as fallback
+        if (process.env.R2_ACCOUNT_ID && process.env.R2_ACCESS_KEY_ID) {
+          return new R2StorageProvider({
+            accountId: process.env.R2_ACCOUNT_ID,
+            accessKeyId: process.env.R2_ACCESS_KEY_ID,
+            secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
+            bucket: process.env.R2_BUCKET || 'alden-media',
+            publicUrl: process.env.R2_PUBLIC_URL,
+            customDomain: process.env.R2_CUSTOM_DOMAIN,
+          });
+        }
+        return this.getNoOpProvider();
     }
+  }
+
+  private getNoOpProvider(): StorageProvider {
+    logger.warn('No storage provider configured, using no-op provider');
+    return {
+      async upload() {
+        throw new Error('Storage provider not configured');
+      },
+      async get() {
+        return null;
+      },
+      async delete() {
+        // No-op
+      },
+      getUrl() {
+        return '';
+      },
+      async list() {
+        return [];
+      },
+      async createPresignedUrl() {
+        throw new Error('Storage provider not configured');
+      },
+    } as StorageProvider;
   }
 
   async uploadFile(

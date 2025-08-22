@@ -396,35 +396,35 @@ export declare const boardRouter: {
         emoji?: string | undefined;
     }, {
         name: string;
-        visibility?: "public" | "private" | undefined;
         description?: string | undefined;
+        visibility?: "public" | "private" | undefined;
         instructions?: string | undefined;
         sources?: string | undefined;
         emoji?: string | undefined;
     }>, import("@orpc/contract").Schema<{
-        id: string;
         name: string;
+        description: string | null;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
-        embedding: number[] | null;
+        icon: string;
         visibility: string;
-        description: string | null;
         instructions: string | null;
         sources: string | null;
-        icon: string;
+        embedding: number[] | null;
         embeddingMetadata: Record<string, any> | null;
         creatorId: string;
     }, {
-        id: string;
         name: string;
+        description: string | null;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
-        embedding: number[] | null;
+        icon: string;
         visibility: string;
-        description: string | null;
         instructions: string | null;
         sources: string | null;
-        icon: string;
+        embedding: number[] | null;
         embeddingMetadata: Record<string, any> | null;
         creatorId: string;
     }>, import("@orpc/contract").MergedErrorMap<Record<never, never>, Record<never, never>>, Record<never, never>>;
@@ -439,16 +439,16 @@ export declare const boardRouter: {
     }, "strip", z.ZodTypeAny, {
         boardId: string;
         name?: string | undefined;
-        visibility?: "public" | "private" | undefined;
         description?: string | undefined;
+        visibility?: "public" | "private" | undefined;
         instructions?: string | undefined;
         sources?: string | undefined;
         emoji?: string | undefined;
     }, {
         boardId: string;
         name?: string | undefined;
-        visibility?: "public" | "private" | undefined;
         description?: string | undefined;
+        visibility?: "public" | "private" | undefined;
         instructions?: string | undefined;
         sources?: string | undefined;
         emoji?: string | undefined;
@@ -611,9 +611,9 @@ export declare const assetRouter: {
         offset: number;
         boardId?: string | undefined;
     }, {
-        boardId?: string | undefined;
         limit?: number | undefined;
         offset?: number | undefined;
+        boardId?: string | undefined;
     }>, import("@orpc/contract").Schema<{
         creator: {
             id: string;
@@ -730,56 +730,56 @@ export declare const assetRouter: {
         metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
     }, "strip", z.ZodTypeAny, {
         name: string;
-        type: "text" | "image" | "video" | "audio" | "gif";
         url: string;
         size: number;
+        type: "image" | "video" | "audio" | "gif" | "text";
         mimeType: string;
         boardId: string;
         metadata?: Record<string, any> | undefined;
     }, {
         name: string;
-        type: "text" | "image" | "video" | "audio" | "gif";
         url: string;
         size: number;
+        type: "image" | "video" | "audio" | "gif" | "text";
         mimeType: string;
         boardId: string;
         metadata?: Record<string, any> | undefined;
     }>, import("@orpc/contract").Schema<{
-        duration: number | null;
-        id: string;
+        metadata: Record<string, any> | null;
         name: string;
+        url: string;
+        size: number | null;
+        duration: number | null;
+        type: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
-        type: string;
-        metadata: Record<string, any> | null;
+        storageKey: string | null;
+        mimeType: string | null;
+        thumbnailUrl: string | null;
         embedding: number[] | null;
         embeddingMetadata: Record<string, any> | null;
         creatorId: string;
-        url: string;
-        thumbnailUrl: string | null;
-        storageKey: string | null;
         width: number | null;
         height: number | null;
-        size: number | null;
-        mimeType: string | null;
     }, {
-        duration: number | null;
-        id: string;
+        metadata: Record<string, any> | null;
         name: string;
+        url: string;
+        size: number | null;
+        duration: number | null;
+        type: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
-        type: string;
-        metadata: Record<string, any> | null;
+        storageKey: string | null;
+        mimeType: string | null;
+        thumbnailUrl: string | null;
         embedding: number[] | null;
         embeddingMetadata: Record<string, any> | null;
         creatorId: string;
-        url: string;
-        thumbnailUrl: string | null;
-        storageKey: string | null;
         width: number | null;
         height: number | null;
-        size: number | null;
-        mimeType: string | null;
     }>, import("@orpc/contract").MergedErrorMap<Record<never, never>, Record<never, never>>, Record<never, never>>;
     update: import("@orpc/server").Procedure<import("@orpc/server").MergedInitialContext<Context & Record<never, never>, Context & Record<never, never> & Omit<Context, keyof Context>, Context>, Omit<Context, keyof AuthenticatedContext> & AuthenticatedContext, z.ZodObject<{
         assetId: z.ZodString;
@@ -787,12 +787,12 @@ export declare const assetRouter: {
         metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
     }, "strip", z.ZodTypeAny, {
         assetId: string;
-        name?: string | undefined;
         metadata?: Record<string, any> | undefined;
+        name?: string | undefined;
     }, {
         assetId: string;
-        name?: string | undefined;
         metadata?: Record<string, any> | undefined;
+        name?: string | undefined;
     }>, import("@orpc/contract").Schema<{
         id: string;
         type: string;
@@ -938,14 +938,14 @@ export declare const uploadRouter: {
         metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
     }, "strip", z.ZodTypeAny, {
         name: string;
-        type: "text" | "image" | "video" | "audio" | "gif" | "file";
         size: number;
+        type: "image" | "video" | "audio" | "gif" | "text" | "file";
         mimeType: string;
         metadata?: Record<string, any> | undefined;
     }, {
         name: string;
-        type: "text" | "image" | "video" | "audio" | "gif" | "file";
         size: number;
+        type: "image" | "video" | "audio" | "gif" | "text" | "file";
         mimeType: string;
         metadata?: Record<string, any> | undefined;
     }>, import("@orpc/contract").Schema<import("@squish-xyz/services").StagedUpload, import("@squish-xyz/services").StagedUpload>, import("@orpc/contract").MergedErrorMap<Record<never, never>, Record<never, never>>, Record<never, never>>;
@@ -1021,68 +1021,68 @@ export declare const searchRouter: {
             assetType: z.ZodOptional<z.ZodArray<z.ZodEnum<["image", "video", "audio", "gif", "text", "file"]>, "many">>;
             boardVisibility: z.ZodOptional<z.ZodArray<z.ZodEnum<["public", "private", "shared"]>, "many">>;
         }, "strip", z.ZodTypeAny, {
-            assetType?: ("text" | "image" | "video" | "audio" | "gif" | "file")[] | undefined;
+            assetType?: ("image" | "video" | "audio" | "gif" | "text" | "file")[] | undefined;
             boardVisibility?: ("public" | "private" | "shared")[] | undefined;
         }, {
-            assetType?: ("text" | "image" | "video" | "audio" | "gif" | "file")[] | undefined;
+            assetType?: ("image" | "video" | "audio" | "gif" | "text" | "file")[] | undefined;
             boardVisibility?: ("public" | "private" | "shared")[] | undefined;
         }>>;
     }, "strip", z.ZodTypeAny, {
-        type: "user" | "board" | "asset" | "all";
+        type: "user" | "all" | "board" | "asset";
         limit: number;
         offset: number;
-        userId?: string | undefined;
         query?: string | undefined;
+        userId?: string | undefined;
+        filters?: {
+            assetType?: ("image" | "video" | "audio" | "gif" | "text" | "file")[] | undefined;
+            boardVisibility?: ("public" | "private" | "shared")[] | undefined;
+        } | undefined;
         boardId?: string | undefined;
         useAI?: boolean | undefined;
         includeSimilar?: boolean | undefined;
-        filters?: {
-            assetType?: ("text" | "image" | "video" | "audio" | "gif" | "file")[] | undefined;
-            boardVisibility?: ("public" | "private" | "shared")[] | undefined;
-        } | undefined;
     }, {
-        type?: "user" | "board" | "asset" | "all" | undefined;
-        userId?: string | undefined;
         query?: string | undefined;
-        boardId?: string | undefined;
-        useAI?: boolean | undefined;
-        includeSimilar?: boolean | undefined;
-        filters?: {
-            assetType?: ("text" | "image" | "video" | "audio" | "gif" | "file")[] | undefined;
-            boardVisibility?: ("public" | "private" | "shared")[] | undefined;
-        } | undefined;
+        type?: "user" | "all" | "board" | "asset" | undefined;
         limit?: number | undefined;
         offset?: number | undefined;
+        userId?: string | undefined;
+        filters?: {
+            assetType?: ("image" | "video" | "audio" | "gif" | "text" | "file")[] | undefined;
+            boardVisibility?: ("public" | "private" | "shared")[] | undefined;
+        } | undefined;
+        boardId?: string | undefined;
+        useAI?: boolean | undefined;
+        includeSimilar?: boolean | undefined;
     }>, import("@orpc/contract").Schema<{
         results: import("@squish-xyz/services").SearchResult[];
         total: number;
         query: string;
-        filters: Record<string, any>;
-    } | {
-        results: import("@squish-xyz/services").SearchResult[];
-        total: number;
-        query: string;
         expanded: string[];
         aiInsights?: {
             relevantTopics: string[];
             searchIntent: string;
             suggestedFilters: string[];
         };
+    } | {
+        results: import("@squish-xyz/services").SearchResult[];
+        total: number;
+        query: string;
+        filters: Record<string, any>;
     }, {
         results: import("@squish-xyz/services").SearchResult[];
         total: number;
         query: string;
-        filters: Record<string, any>;
-    } | {
-        results: import("@squish-xyz/services").SearchResult[];
-        total: number;
-        query: string;
         expanded: string[];
         aiInsights?: {
             relevantTopics: string[];
             searchIntent: string;
             suggestedFilters: string[];
         };
+    } | {
+        results: import("@squish-xyz/services").SearchResult[];
+        total: number;
+        query: string;
+        filters: Record<string, any>;
     }>, import("@orpc/contract").MergedErrorMap<Record<never, never>, Record<never, never>>, Record<never, never>>;
     history: import("@orpc/server").Procedure<import("@orpc/server").MergedInitialContext<Context & Record<never, never>, Context & Record<never, never> & Omit<Context, keyof Context>, Context>, Omit<Context, keyof AuthenticatedContext> & AuthenticatedContext, z.ZodObject<{
         limit: z.ZodDefault<z.ZodNumber>;
@@ -1129,8 +1129,8 @@ export declare const searchRouter: {
         limit: z.ZodDefault<z.ZodNumber>;
         offset: z.ZodDefault<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
-        type: "user" | "board";
         query: string;
+        type: "user" | "board";
         limit: number;
         offset: number;
     }, {
@@ -1547,35 +1547,35 @@ export declare const appRouter: {
             emoji?: string | undefined;
         }, {
             name: string;
-            visibility?: "public" | "private" | undefined;
             description?: string | undefined;
+            visibility?: "public" | "private" | undefined;
             instructions?: string | undefined;
             sources?: string | undefined;
             emoji?: string | undefined;
         }>, import("@orpc/contract").Schema<{
-            id: string;
             name: string;
+            description: string | null;
+            id: string;
             createdAt: Date;
             updatedAt: Date;
-            embedding: number[] | null;
+            icon: string;
             visibility: string;
-            description: string | null;
             instructions: string | null;
             sources: string | null;
-            icon: string;
+            embedding: number[] | null;
             embeddingMetadata: Record<string, any> | null;
             creatorId: string;
         }, {
-            id: string;
             name: string;
+            description: string | null;
+            id: string;
             createdAt: Date;
             updatedAt: Date;
-            embedding: number[] | null;
+            icon: string;
             visibility: string;
-            description: string | null;
             instructions: string | null;
             sources: string | null;
-            icon: string;
+            embedding: number[] | null;
             embeddingMetadata: Record<string, any> | null;
             creatorId: string;
         }>, import("@orpc/contract").MergedErrorMap<Record<never, never>, import("@orpc/contract").MergedErrorMap<Record<never, never>, Record<never, never>>>, Record<never, never>>;
@@ -1590,16 +1590,16 @@ export declare const appRouter: {
         }, "strip", z.ZodTypeAny, {
             boardId: string;
             name?: string | undefined;
-            visibility?: "public" | "private" | undefined;
             description?: string | undefined;
+            visibility?: "public" | "private" | undefined;
             instructions?: string | undefined;
             sources?: string | undefined;
             emoji?: string | undefined;
         }, {
             boardId: string;
             name?: string | undefined;
-            visibility?: "public" | "private" | undefined;
             description?: string | undefined;
+            visibility?: "public" | "private" | undefined;
             instructions?: string | undefined;
             sources?: string | undefined;
             emoji?: string | undefined;
@@ -1762,9 +1762,9 @@ export declare const appRouter: {
             offset: number;
             boardId?: string | undefined;
         }, {
-            boardId?: string | undefined;
             limit?: number | undefined;
             offset?: number | undefined;
+            boardId?: string | undefined;
         }>, import("@orpc/contract").Schema<{
             creator: {
                 id: string;
@@ -1881,56 +1881,56 @@ export declare const appRouter: {
             metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
         }, "strip", z.ZodTypeAny, {
             name: string;
-            type: "text" | "image" | "video" | "audio" | "gif";
             url: string;
             size: number;
+            type: "image" | "video" | "audio" | "gif" | "text";
             mimeType: string;
             boardId: string;
             metadata?: Record<string, any> | undefined;
         }, {
             name: string;
-            type: "text" | "image" | "video" | "audio" | "gif";
             url: string;
             size: number;
+            type: "image" | "video" | "audio" | "gif" | "text";
             mimeType: string;
             boardId: string;
             metadata?: Record<string, any> | undefined;
         }>, import("@orpc/contract").Schema<{
-            duration: number | null;
-            id: string;
+            metadata: Record<string, any> | null;
             name: string;
+            url: string;
+            size: number | null;
+            duration: number | null;
+            type: string;
+            id: string;
             createdAt: Date;
             updatedAt: Date;
-            type: string;
-            metadata: Record<string, any> | null;
+            storageKey: string | null;
+            mimeType: string | null;
+            thumbnailUrl: string | null;
             embedding: number[] | null;
             embeddingMetadata: Record<string, any> | null;
             creatorId: string;
-            url: string;
-            thumbnailUrl: string | null;
-            storageKey: string | null;
             width: number | null;
             height: number | null;
-            size: number | null;
-            mimeType: string | null;
         }, {
-            duration: number | null;
-            id: string;
+            metadata: Record<string, any> | null;
             name: string;
+            url: string;
+            size: number | null;
+            duration: number | null;
+            type: string;
+            id: string;
             createdAt: Date;
             updatedAt: Date;
-            type: string;
-            metadata: Record<string, any> | null;
+            storageKey: string | null;
+            mimeType: string | null;
+            thumbnailUrl: string | null;
             embedding: number[] | null;
             embeddingMetadata: Record<string, any> | null;
             creatorId: string;
-            url: string;
-            thumbnailUrl: string | null;
-            storageKey: string | null;
             width: number | null;
             height: number | null;
-            size: number | null;
-            mimeType: string | null;
         }>, import("@orpc/contract").MergedErrorMap<Record<never, never>, import("@orpc/contract").MergedErrorMap<Record<never, never>, Record<never, never>>>, Record<never, never>>;
         update: import("@orpc/server").Procedure<import("@orpc/server").MergedInitialContext<Context & Record<never, never>, Context & Record<never, never> & Omit<Context & Record<never, never> & Omit<Context, keyof Context>, keyof Context>, Context>, Omit<Context, keyof AuthenticatedContext> & AuthenticatedContext, z.ZodObject<{
             assetId: z.ZodString;
@@ -1938,12 +1938,12 @@ export declare const appRouter: {
             metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
         }, "strip", z.ZodTypeAny, {
             assetId: string;
-            name?: string | undefined;
             metadata?: Record<string, any> | undefined;
+            name?: string | undefined;
         }, {
             assetId: string;
-            name?: string | undefined;
             metadata?: Record<string, any> | undefined;
+            name?: string | undefined;
         }>, import("@orpc/contract").Schema<{
             id: string;
             type: string;
@@ -2089,14 +2089,14 @@ export declare const appRouter: {
             metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
         }, "strip", z.ZodTypeAny, {
             name: string;
-            type: "text" | "image" | "video" | "audio" | "gif" | "file";
             size: number;
+            type: "image" | "video" | "audio" | "gif" | "text" | "file";
             mimeType: string;
             metadata?: Record<string, any> | undefined;
         }, {
             name: string;
-            type: "text" | "image" | "video" | "audio" | "gif" | "file";
             size: number;
+            type: "image" | "video" | "audio" | "gif" | "text" | "file";
             mimeType: string;
             metadata?: Record<string, any> | undefined;
         }>, import("@orpc/contract").Schema<import("@squish-xyz/services").StagedUpload, import("@squish-xyz/services").StagedUpload>, import("@orpc/contract").MergedErrorMap<Record<never, never>, import("@orpc/contract").MergedErrorMap<Record<never, never>, Record<never, never>>>, Record<never, never>>;
@@ -2172,68 +2172,68 @@ export declare const appRouter: {
                 assetType: z.ZodOptional<z.ZodArray<z.ZodEnum<["image", "video", "audio", "gif", "text", "file"]>, "many">>;
                 boardVisibility: z.ZodOptional<z.ZodArray<z.ZodEnum<["public", "private", "shared"]>, "many">>;
             }, "strip", z.ZodTypeAny, {
-                assetType?: ("text" | "image" | "video" | "audio" | "gif" | "file")[] | undefined;
+                assetType?: ("image" | "video" | "audio" | "gif" | "text" | "file")[] | undefined;
                 boardVisibility?: ("public" | "private" | "shared")[] | undefined;
             }, {
-                assetType?: ("text" | "image" | "video" | "audio" | "gif" | "file")[] | undefined;
+                assetType?: ("image" | "video" | "audio" | "gif" | "text" | "file")[] | undefined;
                 boardVisibility?: ("public" | "private" | "shared")[] | undefined;
             }>>;
         }, "strip", z.ZodTypeAny, {
-            type: "user" | "board" | "asset" | "all";
+            type: "user" | "all" | "board" | "asset";
             limit: number;
             offset: number;
-            userId?: string | undefined;
             query?: string | undefined;
+            userId?: string | undefined;
+            filters?: {
+                assetType?: ("image" | "video" | "audio" | "gif" | "text" | "file")[] | undefined;
+                boardVisibility?: ("public" | "private" | "shared")[] | undefined;
+            } | undefined;
             boardId?: string | undefined;
             useAI?: boolean | undefined;
             includeSimilar?: boolean | undefined;
-            filters?: {
-                assetType?: ("text" | "image" | "video" | "audio" | "gif" | "file")[] | undefined;
-                boardVisibility?: ("public" | "private" | "shared")[] | undefined;
-            } | undefined;
         }, {
-            type?: "user" | "board" | "asset" | "all" | undefined;
-            userId?: string | undefined;
             query?: string | undefined;
-            boardId?: string | undefined;
-            useAI?: boolean | undefined;
-            includeSimilar?: boolean | undefined;
-            filters?: {
-                assetType?: ("text" | "image" | "video" | "audio" | "gif" | "file")[] | undefined;
-                boardVisibility?: ("public" | "private" | "shared")[] | undefined;
-            } | undefined;
+            type?: "user" | "all" | "board" | "asset" | undefined;
             limit?: number | undefined;
             offset?: number | undefined;
+            userId?: string | undefined;
+            filters?: {
+                assetType?: ("image" | "video" | "audio" | "gif" | "text" | "file")[] | undefined;
+                boardVisibility?: ("public" | "private" | "shared")[] | undefined;
+            } | undefined;
+            boardId?: string | undefined;
+            useAI?: boolean | undefined;
+            includeSimilar?: boolean | undefined;
         }>, import("@orpc/contract").Schema<{
             results: import("@squish-xyz/services").SearchResult[];
             total: number;
             query: string;
-            filters: Record<string, any>;
-        } | {
-            results: import("@squish-xyz/services").SearchResult[];
-            total: number;
-            query: string;
             expanded: string[];
             aiInsights?: {
                 relevantTopics: string[];
                 searchIntent: string;
                 suggestedFilters: string[];
             };
+        } | {
+            results: import("@squish-xyz/services").SearchResult[];
+            total: number;
+            query: string;
+            filters: Record<string, any>;
         }, {
             results: import("@squish-xyz/services").SearchResult[];
             total: number;
             query: string;
-            filters: Record<string, any>;
-        } | {
-            results: import("@squish-xyz/services").SearchResult[];
-            total: number;
-            query: string;
             expanded: string[];
             aiInsights?: {
                 relevantTopics: string[];
                 searchIntent: string;
                 suggestedFilters: string[];
             };
+        } | {
+            results: import("@squish-xyz/services").SearchResult[];
+            total: number;
+            query: string;
+            filters: Record<string, any>;
         }>, import("@orpc/contract").MergedErrorMap<Record<never, never>, import("@orpc/contract").MergedErrorMap<Record<never, never>, Record<never, never>>>, Record<never, never>>;
         history: import("@orpc/server").Procedure<import("@orpc/server").MergedInitialContext<Context & Record<never, never>, Context & Record<never, never> & Omit<Context & Record<never, never> & Omit<Context, keyof Context>, keyof Context>, Context>, Omit<Context, keyof AuthenticatedContext> & AuthenticatedContext, z.ZodObject<{
             limit: z.ZodDefault<z.ZodNumber>;
@@ -2280,8 +2280,8 @@ export declare const appRouter: {
             limit: z.ZodDefault<z.ZodNumber>;
             offset: z.ZodDefault<z.ZodNumber>;
         }, "strip", z.ZodTypeAny, {
-            type: "user" | "board";
             query: string;
+            type: "user" | "board";
             limit: number;
             offset: number;
         }, {
@@ -2310,10 +2310,10 @@ export declare const appRouter: {
                 fields: z.ZodOptional<z.ZodArray<z.ZodEnum<["id", "name", "description", "icon", "visibility", "assetCount", "ownerId", "createdAt", "updatedAt"]>, "many">>;
             }, "strip", z.ZodTypeAny, {
                 boardIds: string[];
-                fields?: ("id" | "name" | "createdAt" | "updatedAt" | "visibility" | "description" | "icon" | "assetCount" | "ownerId")[] | undefined;
+                fields?: ("name" | "description" | "id" | "createdAt" | "updatedAt" | "icon" | "visibility" | "assetCount" | "ownerId")[] | undefined;
             }, {
                 boardIds: string[];
-                fields?: ("id" | "name" | "createdAt" | "updatedAt" | "visibility" | "description" | "icon" | "assetCount" | "ownerId")[] | undefined;
+                fields?: ("name" | "description" | "id" | "createdAt" | "updatedAt" | "icon" | "visibility" | "assetCount" | "ownerId")[] | undefined;
             }>, import("@orpc/contract").Schema<{
                 boards: any[];
             }, {
@@ -2369,25 +2369,25 @@ export declare const appRouter: {
                         start: z.ZodOptional<z.ZodString>;
                         end: z.ZodOptional<z.ZodString>;
                     }, "strip", z.ZodTypeAny, {
-                        end?: string | undefined;
                         start?: string | undefined;
+                        end?: string | undefined;
                     }, {
-                        end?: string | undefined;
                         start?: string | undefined;
+                        end?: string | undefined;
                     }>>;
                 }, "strip", z.ZodTypeAny, {
                     boardIds?: string[] | undefined;
                     assetTypes?: string[] | undefined;
                     dateRange?: {
-                        end?: string | undefined;
                         start?: string | undefined;
+                        end?: string | undefined;
                     } | undefined;
                 }, {
                     boardIds?: string[] | undefined;
                     assetTypes?: string[] | undefined;
                     dateRange?: {
-                        end?: string | undefined;
                         start?: string | undefined;
+                        end?: string | undefined;
                     } | undefined;
                 }>>;
                 limit: z.ZodDefault<z.ZodNumber>;
@@ -2395,43 +2395,43 @@ export declare const appRouter: {
             }, "strip", z.ZodTypeAny, {
                 query: string;
                 limit: number;
-                searchType: "boards" | "assets" | "all" | "users";
+                searchType: "boards" | "assets" | "users" | "all";
                 threshold: number;
+                embeddings?: number[] | undefined;
                 filters?: {
                     boardIds?: string[] | undefined;
                     assetTypes?: string[] | undefined;
                     dateRange?: {
-                        end?: string | undefined;
                         start?: string | undefined;
+                        end?: string | undefined;
                     } | undefined;
                 } | undefined;
-                embeddings?: number[] | undefined;
             }, {
                 query: string;
+                limit?: number | undefined;
+                embeddings?: number[] | undefined;
+                searchType?: "boards" | "assets" | "users" | "all" | undefined;
                 filters?: {
                     boardIds?: string[] | undefined;
                     assetTypes?: string[] | undefined;
                     dateRange?: {
-                        end?: string | undefined;
                         start?: string | undefined;
+                        end?: string | undefined;
                     } | undefined;
                 } | undefined;
-                limit?: number | undefined;
-                embeddings?: number[] | undefined;
-                searchType?: "boards" | "assets" | "all" | "users" | undefined;
                 threshold?: number | undefined;
             }>, import("@orpc/contract").Schema<{
                 results: any[];
                 metadata: {
                     totalResults: number;
-                    searchType: "boards" | "assets" | "all" | "users";
+                    searchType: "boards" | "assets" | "users" | "all";
                     threshold: number;
                 };
             }, {
                 results: any[];
                 metadata: {
                     totalResults: number;
-                    searchType: "boards" | "assets" | "all" | "users";
+                    searchType: "boards" | "assets" | "users" | "all";
                     threshold: number;
                 };
             }>, import("@orpc/contract").MergedErrorMap<Record<never, never>, import("@orpc/contract").MergedErrorMap<Record<never, never>, import("@orpc/contract").MergedErrorMap<Record<never, never>, Record<never, never>>>>, Record<never, never>>;
@@ -2469,12 +2469,12 @@ export declare const appRouter: {
             }, "strip", z.ZodTypeAny, {
                 entityType: "user" | "board" | "asset";
                 entityId: string;
-                metrics: ("collaboration" | "engagement" | "growth" | "quality" | "trends")[];
+                metrics: ("engagement" | "growth" | "quality" | "collaboration" | "trends")[];
                 timeframe: "1d" | "7d" | "30d" | "90d";
             }, {
                 entityType: "user" | "board" | "asset";
                 entityId: string;
-                metrics?: ("collaboration" | "engagement" | "growth" | "quality" | "trends")[] | undefined;
+                metrics?: ("engagement" | "growth" | "quality" | "collaboration" | "trends")[] | undefined;
                 timeframe?: "1d" | "7d" | "30d" | "90d" | undefined;
             }>, import("@orpc/contract").Schema<{
                 insights: any;
@@ -2494,9 +2494,9 @@ export declare const appRouter: {
                 timeframe: "7d" | "1h" | "24h";
                 category?: "boards" | "assets" | "topics" | undefined;
             }, {
-                category?: "boards" | "assets" | "topics" | undefined;
                 limit?: number | undefined;
                 timeframe?: "7d" | "1h" | "24h" | undefined;
+                category?: "boards" | "assets" | "topics" | undefined;
             }>, import("@orpc/contract").Schema<{
                 trending: any;
             }, {
@@ -2524,9 +2524,9 @@ export declare const appRouter: {
                 }>>;
                 limit: z.ZodDefault<z.ZodNumber>;
             }, "strip", z.ZodTypeAny, {
-                userId: string;
                 limit: number;
-                recommendationType: "boards" | "assets" | "collaborators" | "topics";
+                userId: string;
+                recommendationType: "boards" | "assets" | "topics" | "collaborators";
                 context?: {
                     currentBoardId?: string | undefined;
                     recentInteractions?: string[] | undefined;
@@ -2534,7 +2534,7 @@ export declare const appRouter: {
                 } | undefined;
             }, {
                 userId: string;
-                recommendationType: "boards" | "assets" | "collaborators" | "topics";
+                recommendationType: "boards" | "assets" | "topics" | "collaborators";
                 limit?: number | undefined;
                 context?: {
                     currentBoardId?: string | undefined;
@@ -2556,10 +2556,10 @@ export declare const appRouter: {
                 method: z.ZodDefault<z.ZodEnum<["user_based", "item_based", "hybrid"]>>;
                 limit: z.ZodDefault<z.ZodNumber>;
             }, "strip", z.ZodTypeAny, {
-                userId: string;
                 limit: number;
-                method: "user_based" | "item_based" | "hybrid";
+                userId: string;
                 itemType: "boards" | "assets";
+                method: "user_based" | "item_based" | "hybrid";
             }, {
                 userId: string;
                 itemType: "boards" | "assets";

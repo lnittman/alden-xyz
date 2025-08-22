@@ -175,4 +175,7 @@ app.notFound((c) => {
   );
 });
 
+// Export Durable Objects from realtime package
+export { ChatRoom } from '@repo/realtime';
+
 export default app;

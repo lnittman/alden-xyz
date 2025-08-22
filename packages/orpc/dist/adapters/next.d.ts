@@ -14,35 +14,35 @@ export declare const createBoardAction: import("@orpc/server").Procedure<import(
     emoji?: string | undefined;
 }, {
     name: string;
-    visibility?: "public" | "private" | undefined;
     description?: string | undefined;
+    visibility?: "public" | "private" | undefined;
     instructions?: string | undefined;
     sources?: string | undefined;
     emoji?: string | undefined;
 }>, import("@orpc/contract").Schema<{
-    id: string;
     name: string;
+    description: string | null;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
-    embedding: number[] | null;
+    icon: string;
     visibility: string;
-    description: string | null;
     instructions: string | null;
     sources: string | null;
-    icon: string;
+    embedding: number[] | null;
     embeddingMetadata: Record<string, any> | null;
     creatorId: string;
 }, {
-    id: string;
     name: string;
+    description: string | null;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
-    embedding: number[] | null;
+    icon: string;
     visibility: string;
-    description: string | null;
     instructions: string | null;
     sources: string | null;
-    icon: string;
+    embedding: number[] | null;
     embeddingMetadata: Record<string, any> | null;
     creatorId: string;
 }>, import("@orpc/contract").MergedErrorMap<Record<never, never>, import("@orpc/contract").MergedErrorMap<Record<never, never>, Record<never, never>>>, Record<never, never>>;
@@ -57,16 +57,16 @@ export declare const updateBoardAction: import("@orpc/server").Procedure<import(
 }, "strip", import("zod").ZodTypeAny, {
     boardId: string;
     name?: string | undefined;
-    visibility?: "public" | "private" | undefined;
     description?: string | undefined;
+    visibility?: "public" | "private" | undefined;
     instructions?: string | undefined;
     sources?: string | undefined;
     emoji?: string | undefined;
 }, {
     boardId: string;
     name?: string | undefined;
-    visibility?: "public" | "private" | undefined;
     description?: string | undefined;
+    visibility?: "public" | "private" | undefined;
     instructions?: string | undefined;
     sources?: string | undefined;
     emoji?: string | undefined;
@@ -177,56 +177,56 @@ export declare const createAssetAction: import("@orpc/server").Procedure<import(
     metadata: import("zod").ZodOptional<import("zod").ZodRecord<import("zod").ZodString, import("zod").ZodAny>>;
 }, "strip", import("zod").ZodTypeAny, {
     name: string;
-    type: "text" | "image" | "video" | "audio" | "gif";
     url: string;
     size: number;
+    type: "image" | "video" | "audio" | "gif" | "text";
     mimeType: string;
     boardId: string;
     metadata?: Record<string, any> | undefined;
 }, {
     name: string;
-    type: "text" | "image" | "video" | "audio" | "gif";
     url: string;
     size: number;
+    type: "image" | "video" | "audio" | "gif" | "text";
     mimeType: string;
     boardId: string;
     metadata?: Record<string, any> | undefined;
 }>, import("@orpc/contract").Schema<{
-    duration: number | null;
-    id: string;
+    metadata: Record<string, any> | null;
     name: string;
+    url: string;
+    size: number | null;
+    duration: number | null;
+    type: string;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
-    type: string;
-    metadata: Record<string, any> | null;
+    storageKey: string | null;
+    mimeType: string | null;
+    thumbnailUrl: string | null;
     embedding: number[] | null;
     embeddingMetadata: Record<string, any> | null;
     creatorId: string;
-    url: string;
-    thumbnailUrl: string | null;
-    storageKey: string | null;
     width: number | null;
     height: number | null;
-    size: number | null;
-    mimeType: string | null;
 }, {
-    duration: number | null;
-    id: string;
+    metadata: Record<string, any> | null;
     name: string;
+    url: string;
+    size: number | null;
+    duration: number | null;
+    type: string;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
-    type: string;
-    metadata: Record<string, any> | null;
+    storageKey: string | null;
+    mimeType: string | null;
+    thumbnailUrl: string | null;
     embedding: number[] | null;
     embeddingMetadata: Record<string, any> | null;
     creatorId: string;
-    url: string;
-    thumbnailUrl: string | null;
-    storageKey: string | null;
     width: number | null;
     height: number | null;
-    size: number | null;
-    mimeType: string | null;
 }>, import("@orpc/contract").MergedErrorMap<Record<never, never>, import("@orpc/contract").MergedErrorMap<Record<never, never>, Record<never, never>>>, Record<never, never>>;
 export declare const updateAssetAction: import("@orpc/server").Procedure<import("@orpc/server").MergedInitialContext<import("..").Context & Record<never, never>, import("..").Context & Record<never, never> & Omit<import("..").Context & Record<never, never> & Omit<import("..").Context, keyof import("..").Context>, keyof import("..").Context>, import("..").Context>, Omit<import("..").Context, keyof import("..").AuthenticatedContext> & import("..").AuthenticatedContext, import("zod").ZodObject<{
     assetId: import("zod").ZodString;
@@ -234,12 +234,12 @@ export declare const updateAssetAction: import("@orpc/server").Procedure<import(
     metadata: import("zod").ZodOptional<import("zod").ZodRecord<import("zod").ZodString, import("zod").ZodAny>>;
 }, "strip", import("zod").ZodTypeAny, {
     assetId: string;
-    name?: string | undefined;
     metadata?: Record<string, any> | undefined;
+    name?: string | undefined;
 }, {
     assetId: string;
-    name?: string | undefined;
     metadata?: Record<string, any> | undefined;
+    name?: string | undefined;
 }>, import("@orpc/contract").Schema<{
     id: string;
     type: string;

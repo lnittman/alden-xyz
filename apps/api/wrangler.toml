@@ -14,10 +14,35 @@ STORAGE_PROVIDER = "r2"
 R2_ACCOUNT_ID = "ace708c6a8408e0711aac868ccb94a82"
 R2_BUCKET_NAME = "alden-assets"
 
-# R2 bucket binding
+# R2 bucket bindings
 [[r2_buckets]]
 binding = "ASSETS_BUCKET"
 bucket_name = "alden-assets"
+
+[[r2_buckets]]
+binding = "MEDIA_BUCKET"
+bucket_name = "alden-media"
+
+# KV Namespaces for caching and sessions
+[[kv_namespaces]]
+binding = "CACHE_KV"
+id = "your-cache-kv-id"
+preview_id = "your-cache-kv-preview-id"
+
+[[kv_namespaces]]
+binding = "SESSION_KV"
+id = "your-session-kv-id"
+preview_id = "your-session-kv-preview-id"
+
+# Durable Objects for real-time features
+[durable_objects]
+bindings = [
+  { name = "CHAT_ROOMS", class_name = "ChatRoom", script_name = "alden-api" }
+]
+
+[[migrations]]
+tag = "v1"
+new_classes = ["ChatRoom"]
 
 # Observability
 [observability]
