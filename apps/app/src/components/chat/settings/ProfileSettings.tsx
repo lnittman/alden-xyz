@@ -3,7 +3,6 @@
 import React from "react"
 import { Upload } from "lucide-react"
 import { toast } from "sonner"
-import { api } from "@/lib/api/client"
 import { useUser } from "@clerk/nextjs"
 
 interface ProfileSettingsProps {
@@ -19,22 +18,8 @@ export function ProfileSettings({ user, onSave }: ProfileSettingsProps) {
     if (!file || !user) return
 
     try {
-      const formData = new FormData()
-      formData.append('file', file)
-
-      const response = await api.post('/users/upload-avatar', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      } as any)
-
-      const data = await response.json()
-      if (data.success) {
-        toast.success("avatar updated")
-        onSave()
-      } else {
-        throw new Error('Upload failed')
-      }
+      // TODO: Implement avatar upload with Convex storage
+      toast.info("Avatar upload coming soon")
     } catch (error) {
       console.error("Failed to upload avatar:", error)
       toast.error("failed to upload avatar")

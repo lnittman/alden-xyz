@@ -21,7 +21,6 @@ import {
   TooltipProvider 
 } from "@/components/ui/tooltip"
 import { Button } from "@/components/ui/button"
-import { api } from "@/lib/api/client"
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
 import { Slider } from "@/components/ui/slider"
 

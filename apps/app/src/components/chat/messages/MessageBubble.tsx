@@ -13,9 +13,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { toast } from "sonner"
-import { useAppSelector } from "@/lib/redux/store"
-import { selectMessageReferences } from "@/lib/redux/slices/chatSlice"
-import { Message } from '@/types'
 import { ContextBar } from "../context/ContextBar"
 import type { Context } from "@/types/ai/context"
 
@@ -61,7 +58,6 @@ export function MessageBubble({
   onThread,
   contexts = []
 }: MessageBubbleProps) {
-  const references = useAppSelector(state => selectMessageReferences(state, message.id))
   const [isHovered, setIsHovered] = useState(false)
 
   // Ensure we have a valid date before formatting

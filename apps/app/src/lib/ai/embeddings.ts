@@ -1,7 +1,6 @@
 import crypto from "crypto"
-
-import { api } from "@/lib/api/client"
-import { VertexAI } from "@google-cloud/vertexai"
+import { ConvexClient } from "convex/browser"
+import { api } from "@repo/backend/convex/_generated/api"
 
 export interface EmbeddingResponse {
   embedding: number[]
@@ -25,6 +24,9 @@ export interface SimilarityMatch {
   similarity: number
 }
 
+// Create a client for non-hook contexts
+const convexClient = new ConvexClient(process.env.NEXT_PUBLIC_CONVEX_URL!)
+
 export class EmbeddingService {
   // Generate embedding for text content
   private static hashContent(text: string, imageUrl?: string): string {
@@ -34,31 +36,30 @@ export class EmbeddingService {
       .digest('hex')
   }
 
-  private static async cacheEmbedding(hash: string, embedding: number[], token?: string) {
-    await api.post('/ai/embeddings/cache', {
-      content_hash: hash,
+  private static async cacheEmbedding(hash: string, embedding: number[]) {
+    await convexClient.mutation(api.ai.cacheEmbedding, {
+      contentHash: hash,
       embedding
-    }, { token })
+    })
   }
 
-  static async generateEmbedding(text: string, options: { token?: string } = {}): Promise<number[]> {
-    const response = await api.post('/ai/generate-embedding', {
+  static async generateEmbedding(text: string): Promise<number[]> {
+    const result = await convexClient.mutation(api.ai.generateEmbedding, {
       text
-    }, { token: options.token })
+    })
     
-    const data = await response.json()
-    return (data?.embedding as number[]) || []
+    return result?.embedding || []
   }
 
   // Get cached embedding if available
   static async getCachedEmbedding(
-    contentHash: string,
-    options: { token?: string } = {}
+    contentHash: string
   ): Promise<number[] | null> {
     try {
-      const response = await api.get(`/ai/embeddings/cache/${encodeURIComponent(contentHash)}`, { token: options.token })
-      const data = await response.json()
-      return data?.embedding as number[] || null
+      const result = await convexClient.query(api.ai.getCachedEmbedding, {
+        contentHash
+      })
+      return result?.embedding || null
     } catch (error) {
       // If not found, return null
       return null
@@ -70,66 +71,61 @@ export class EmbeddingService {
     embedding: number[],
     options: EmbeddingOptions = {}
   ): Promise<SimilarityMatch[]> {
-    const { token, ...searchOptions } = options
-    
-    const response = await api.post("/ai/embeddings/similar", {
-      query_embedding: embedding,
-      match_threshold: searchOptions.threshold || 0.7,
-      match_count: searchOptions.limit || 10,
-      context_type: searchOptions.type,
-      chat_id: searchOptions.chatId
-    }, { token })
+    const result = await convexClient.mutation(api.ai.findSimilar, {
+      embedding,
+      threshold: options.threshold || 0.7,
+      limit: options.limit || 10,
+      type: options.type,
+      chatId: options.chatId
+    })
 
-    const data = await response.json()
-    return data as SimilarityMatch[]
+    return result as SimilarityMatch[]
   }
 
   // Batch process multiple texts
-  static async batchGenerateEmbeddings(texts: string[], options: { token?: string } = {}): Promise<number[][]> {
-    const response = await api.post('/ai/embeddings/batch', {
+  static async batchGenerateEmbeddings(texts: string[]): Promise<number[][]> {
+    const result = await convexClient.mutation(api.ai.batchGenerateEmbeddings, {
       texts
-    }, { token: options.token })
+    })
 
-    const data = await response.json()
-    return data.embeddings as number[][]
+    return result.embeddings as number[][]
   }
-
 
   // Queue content for embedding generation
   static async queueForEmbedding(
     contentId: string,
-    contentType: 'message' | 'file' | 'context',
-    options: { token?: string } = {}
+    contentType: 'message' | 'file' | 'context'
   ): Promise<string> {
-    const response = await api.post('/ai/embeddings/queue', {
-      content_id: contentId,
-      content_type: contentType
-    }, { token: options.token })
+    const result = await convexClient.mutation(api.ai.queueEmbedding, {
+      contentId,
+      contentType
+    })
 
-    const data = await response.json()
-    return data.job_id as string
+    return result.jobId as string
   }
 
   // Check embedding queue status
-  static async checkEmbeddingStatus(jobId: string, options: { token?: string } = {}): Promise<{
+  static async checkEmbeddingStatus(jobId: string): Promise<{
     status: 'pending' | 'processing' | 'completed' | 'failed'
     error?: string
   }> {
-    const response = await api.get(`/ai/embeddings/queue/${encodeURIComponent(jobId)}`, { token: options.token })
-    const data = await response.json()
+    const result = await convexClient.query(api.ai.getEmbeddingStatus, {
+      jobId
+    })
 
     return {
-      status: (data?.status as 'pending' | 'processing' | 'completed' | 'failed') || 'failed',
-      error: data?.last_error as string | undefined
+      status: result?.status || 'failed',
+      error: result?.error
     }
   }
 
-  static async generateAndStore(content: string, options: { messageId: string; chatId: string; token?: string }) {
-    const embedding = await this.generateEmbedding(content, { token: options.token })
+  static async generateAndStore(content: string, options: { messageId: string; chatId: string }) {
+    const embedding = await this.generateEmbedding(content)
     
-    await api.patch(`/messages/${options.messageId}`, {
+    await convexClient.mutation(api.messages.updateEmbedding, {
+      messageId: options.messageId,
       embedding
-    }, { token: options.token })
+    })
 
     return embedding
   }

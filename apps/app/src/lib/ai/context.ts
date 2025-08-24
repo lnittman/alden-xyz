@@ -1,4 +1,5 @@
-import { api } from "@/lib/api/client"
+import { ConvexClient } from "convex/browser"
+import { api } from "@repo/backend/convex/_generated/api"
 import { EmbeddingService } from "./embeddings"
 
 export interface ContextMetadata {
@@ -21,6 +22,9 @@ export interface Context {
   embedding?: number[]
 }
 
+// Create a client for non-hook contexts
+const convexClient = new ConvexClient(process.env.NEXT_PUBLIC_CONVEX_URL!)
+
 export class ContextService {
   static async findSimilarContexts(
     text: string,
@@ -33,18 +37,15 @@ export class ContextService {
   ) {
     const embedding = await EmbeddingService.generateEmbedding(text)
     
-    const response = await api.post('/ai/find-similar', {
+    const result = await convexClient.mutation(api.ai.findSimilar, {
       embedding,
-      options: {
-        threshold: options.threshold || 0.7,
-        limit: options.limit || 5,
-        type: options.type,
-        chatId: options.chatId
-      }
+      threshold: options.threshold || 0.7,
+      limit: options.limit || 5,
+      type: options.type,
+      chatId: options.chatId
     })
 
-    const data = await response.json()
-    return data as Context[]
+    return result as Context[]
   }
 
   static async createContext(
@@ -54,13 +55,13 @@ export class ContextService {
   ) {
     const embedding = await EmbeddingService.generateEmbedding(content)
 
-    const response = await api.post('/contexts', {
+    const result = await convexClient.mutation(api.contexts.create, {
       type,
       metadata,
       embedding
     })
 
-    return await response.json()
+    return result
   }
 
   static async linkContextToMessage(
@@ -68,7 +69,7 @@ export class ContextService {
     messageId: string,
     metadata: Record<string, any> = {}
   ) {
-    await api.post('/message-contexts', {
+    await convexClient.mutation(api.contexts.linkToMessage, {
       contextId,
       messageId,
       metadata
@@ -76,12 +77,13 @@ export class ContextService {
   }
 
   static async getMessageContexts(messageId: string) {
-    const response = await api.get(`/messages/${messageId}/contexts`)
-    const data = await response.json()
+    const result = await convexClient.query(api.contexts.getMessageContexts, {
+      messageId
+    })
     
-    return data?.map((row: any) => ({
+    return result?.map((row: any) => ({
       ...row.context,
       linkMetadata: row.metadata
     })) || []
   }
-} 
+}

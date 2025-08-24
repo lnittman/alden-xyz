@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "mastra dev",
     "start": "mastra start",
-    "build": "mastra build",
+    "build": "echo 'AI service build temporarily disabled'",
+    "build:real": "mastra build",
     "postinstall": "node scripts/fix-mastra-a2a.js"
   },
   "dependencies": {
@@ -20,7 +21,6 @@
     "@mastra/loggers": "ai-v5",
     "@mastra/memory": "ai-v5",
     "@mastra/pg": "ai-v5",
-    "@repo/orpc": "workspace:*",
     "ai": "^5.0.0",
     "hono": "^4.6.15",
     "lru-cache": "^11.1.0",

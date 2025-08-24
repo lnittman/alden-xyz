@@ -10,13 +10,15 @@ import {
   Sparkles,
   Pin,
 } from "lucide-react"
+import { useMutation } from "convex/react"
+import { api } from "@repo/backend/convex/_generated/api"
+import { Id } from "@repo/backend/convex/_generated/dataModel"
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { api } from "@/lib/api/client"
 import { cn } from "@/lib/utils"
 
 interface ChatMenuProps {
@@ -43,6 +45,8 @@ interface MenuItem {
 
 export function ChatMenu({ chat, align = 'end', className, children }: ChatMenuProps) {
   const router = useRouter()
+  const updateChat = useMutation(api.chats.update)
+  const deleteChat = useMutation(api.chats.delete)
   const [isDeleting, setIsDeleting] = React.useState(false)
   const [isArchiving, setIsArchiving] = React.useState(false)
   const [isPinning, setIsPinning] = React.useState(false)
@@ -51,7 +55,10 @@ export function ChatMenu({ chat, align = 'end', className, children }: ChatMenuP
   const handleArchive = React.useCallback(async () => {
     setIsArchiving(true)
     try {
-      await api.patch(`/chats/${chat.id}`, { is_archived: true })
+      await updateChat({ 
+        id: chat.id as Id<"chats">, 
+        archived: true 
+      })
       toast.success('chat archived')
     } catch (error) {
       console.error('Failed to archive chat:', error)
@@ -59,12 +66,12 @@ export function ChatMenu({ chat, align = 'end', className, children }: ChatMenuP
     } finally {
       setIsArchiving(false)
     }
-  }, [chat.id])
+  }, [chat.id, updateChat])
 
   const handleDelete = React.useCallback(async () => {
     setIsDeleting(true)
     try {
-      await api.delete(`/chats/${chat.id}`)
+      await deleteChat({ id: chat.id as Id<"chats"> })
       toast.success('chat deleted')
       router.push('/chat')
     } catch (error) {
@@ -73,12 +80,15 @@ export function ChatMenu({ chat, align = 'end', className, children }: ChatMenuP
     } finally {
       setIsDeleting(false)
     }
-  }, [chat.id, router])
+  }, [chat.id, router, deleteChat])
 
   const handlePin = React.useCallback(async () => {
     setIsPinning(true)
     try {
-      await api.patch(`/chats/${chat.id}`, { pinned: !chat.pinned })
+      await updateChat({ 
+        id: chat.id as Id<"chats">, 
+        pinned: !chat.pinned 
+      })
       toast.success(chat.pinned ? 'chat unpinned' : 'chat pinned')
     } catch (error) {
       console.error('Failed to toggle pin:', error)
@@ -86,7 +96,7 @@ export function ChatMenu({ chat, align = 'end', className, children }: ChatMenuP
     } finally {
       setIsPinning(false)
     }
-  }, [chat.id, chat.pinned])
+  }, [chat.id, chat.pinned, updateChat])
 
   const menuItems = React.useMemo(() => {
     const items: MenuItem[] = [

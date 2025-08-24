@@ -8,11 +8,19 @@ import { PinoLogger } from '@mastra/loggers';
 // Import agent creators
 import { createAldenChatAgent } from './agents/chat/index';
 
+// Import Convex storage adapter
+import { ConvexMastraStorage } from './storage/convex-adapter';
+
 // Configure structured logging
 const logger = new PinoLogger({
   name: 'alden-ai',
   level: 'debug',
 });
+
+// Initialize Convex storage
+const storage = new ConvexMastraStorage(
+  process.env.CONVEX_URL || 'https://your-app.convex.cloud'
+);
 
 /**
  * Create Mastra instance with environment support
@@ -33,4 +41,7 @@ export const mastra = new Mastra({
 
   // AI SDK compatibility - v5
   aiSdkCompat: 'v5',
+  
+  // Custom storage adapter for Convex
+  storage,
 });

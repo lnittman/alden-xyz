@@ -1,5 +1,9 @@
-import { api } from "../api/client"
+import { ConvexClient } from "convex/browser"
+import { api } from "@repo/backend/convex/_generated/api"
 import { ContextAnalysis } from '@/types'
+
+// Create a client for non-hook contexts
+const convexClient = new ConvexClient(process.env.NEXT_PUBLIC_CONVEX_URL!)
 
 interface MessageContext {
   recentMessages: string[]
@@ -23,34 +27,31 @@ interface ContentAnalysis {
 
 export class AIService {
   static async analyzeMessage(content: string, context: MessageContext, options: { token?: string } = {}): Promise<ContentAnalysis> {
-    const response = await api.post("/ai/analyze-message", {
+    const result = await convexClient.mutation(api.ai.analyzeMessage, {
       content,
-      context: {
-        ...context,
-        attachedFiles: undefined // Don't send file data directly
-      }
-    }, { token: options.token })
+      chatId: context.threadContext || '',
+      mode: 'standard'
+    })
 
-    return await response.json()
+    return result as ContentAnalysis
   }
 
-  static async findSimilarMessages(content: string, chatId: string, options: { token?: string } = {}) {
-    const response = await api.post("/ai/find-similar-messages", {
+  static async findSimilarMessages(content: string, chatId: string) {
+    const result = await convexClient.mutation(api.ai.findSimilarMessages, {
       content, 
       chatId
-    }, { token: options.token })
+    })
     
-    const data = await response.json()
-    return data || []
+    return result || []
   }
 
-  static async generateResponse(content: string, context: string, options: { token?: string } = {}) {
-    const response = await api.post("/ai/generate-response", {
+  static async generateResponse(content: string, context: string) {
+    const result = await convexClient.mutation(api.ai.generateResponse, {
       content, 
       context
-    }, { token: options.token })
+    })
     
-    return await response.json()
+    return result
   }
 
   static async findSimilarContent(embedding: number[], options: {
@@ -60,39 +61,37 @@ export class AIService {
     includedChats?: string[]
     token?: string
   } = {}) {
-    const { token, ...searchOptions } = options
-    
-    const response = await api.post("/ai/find-similar", {
+    const result = await convexClient.mutation(api.ai.findSimilar, {
       embedding,
-      options: searchOptions
-    }, { token })
+      threshold: options.threshold || 0.7,
+      limit: options.limit || 10,
+      type: options.includeFiles ? 'file' : undefined,
+      chatId: options.includedChats?.[0]
+    })
 
-    return await response.json()
+    return { messages: result || [] }
   }
 
-  static async getSmartSuggestions(content: string, context: MessageContext, options: { token?: string } = {}) {
-    const response = await api.post("/ai/get-suggestions", {
+  static async getSmartSuggestions(content: string, context: MessageContext) {
+    const result = await convexClient.mutation(api.ai.getSuggestions, {
       content,
-      context: {
-        ...context,
-        attachedFiles: undefined
-      }
-    }, { token: options.token })
+      chatId: context.threadContext || ''
+    })
 
-    return await response.json()
+    return result
   }
 
-  static async processFile(file: File, options: { token?: string } = {}) {
+  static async processFile(file: File) {
     // Convert file to base64
     const base64 = await this.fileToBase64(file)
     
-    const response = await api.post("/ai/process-file", {
+    const result = await convexClient.mutation(api.ai.processFile, {
       content: base64,
       type: file.type,
       name: file.name
-    }, { token: options.token })
+    })
 
-    return await response.json()
+    return result
   }
 
   private static async fileToBase64(file: File): Promise<string> {
@@ -107,12 +106,11 @@ export class AIService {
     })
   }
 
-  static async generateEmbedding(text: string, options: { token?: string } = {}) {
-    const response = await api.post('/ai/generate-embedding', {
+  static async generateEmbedding(text: string) {
+    const result = await convexClient.mutation(api.ai.generateEmbedding, {
       text
-    }, { token: options.token })
+    })
     
-    const data = await response.json()
-    return data.embedding
+    return result.embedding
   }
 }

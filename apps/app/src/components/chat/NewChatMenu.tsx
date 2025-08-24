@@ -3,7 +3,8 @@
 import React, { useState, useRef, useEffect } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { Search, Plus, Users, X, ArrowRight } from "lucide-react"
-import { api } from "@/lib/api/client"
+import { useQuery } from "convex/react"
+import { api } from "@repo/backend/convex/_generated/api"
 import { cn } from "@/lib/utils"
 import { PlatformInviteMenu } from "./PlatformInviteMenu"
 import { PendingInvite } from "./PendingInvite"
@@ -43,16 +44,12 @@ export function NewChatMenu({
   const inputRef = useRef<HTMLInputElement>(null)
   const [pendingInvites, setPendingInvites] = useState<PendingInvite[]>([])
 
-  const searchProfiles = async (searchQuery: string) => {
-    try {
-      const response = await api.get(`/users/search?q=${encodeURIComponent(searchQuery)}&limit=5`)
-      const data = await response.json()
-      return data.data || []
-    } catch (error) {
-      console.error('Error searching profiles:', error)
-      return []
-    }
-  }
+  // Use Convex query for user search
+  const searchQuery = query.startsWith("@") && query.length > 1 && !isEmailMode ? query.slice(1) : ""
+  const searchResults = useQuery(
+    api.users.search,
+    searchQuery ? { query: searchQuery } : "skip"
+  )
 
   useEffect(() => {
     if (isOpen) {
@@ -66,31 +63,14 @@ export function NewChatMenu({
   }, [isOpen])
 
   useEffect(() => {
-    const search = async () => {
-      if (!isEmailMode && query.startsWith("@") && query.length > 1) {
-        setIsLoading(true)
-        try {
-          const searchQuery = query.slice(1).toLowerCase()
-          const results = await searchProfiles(searchQuery)
-          if (!isExiting) {
-        setSuggestions(results)
-            setSelectedIndex(-1)
-          }
-        } catch (error) {
-          console.error('Error searching profiles:', error)
-          setSuggestions([])
-        } finally {
-          setIsLoading(false)
-        }
-      } else {
-        setSuggestions([])
-        setSelectedIndex(-1)
-      }
+    if (searchResults) {
+      setSuggestions(searchResults)
+      setSelectedIndex(-1)
+    } else if (!searchQuery) {
+      setSuggestions([])
+      setSelectedIndex(-1)
     }
-
-    const timeoutId = setTimeout(search, 300)
-    return () => clearTimeout(timeoutId)
-  }, [query, isExiting, isEmailMode])
+  }, [searchResults, searchQuery])
 
   useEffect(() => {
     if (suggestions.length > 0) {

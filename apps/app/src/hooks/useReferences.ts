@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { api } from "@/lib/api/client"
+import { useMutation } from "convex/react"
+import { api } from "@repo/backend/convex/_generated/api"
 
 export interface Reference {
   id: string
@@ -16,39 +17,39 @@ export function useReferences(text: string, chatId: string) {
   const [references, setReferences] = useState<Reference[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<Error | null>(null)
+  
+  const findReferences = useMutation(api.ai.findReferences)
 
   useEffect(() => {
     let isCancelled = false
 
     async function detectReferences() {
       if (!text.trim()) {
-      setReferences([])
-      return
-    }
+        setReferences([])
+        return
+      }
 
-    setIsLoading(true)
-    setError(null)
+      setIsLoading(true)
+      setError(null)
 
-    try {
-        const response = await api.post("/ai/find-references", {
+      try {
+        const result = await findReferences({
           query: text,
           chatId
         })
-        
-        const data = await response.json()
 
-        if (!isCancelled) {
-          setReferences(data.matches || [])
+        if (!isCancelled && result) {
+          setReferences(result.matches || [])
         }
-    } catch (err) {
+      } catch (err) {
         if (!isCancelled) {
           console.error("Error detecting references:", err)
           setError(err instanceof Error ? err : new Error("Failed to detect references"))
         }
-    } finally {
+      } finally {
         if (!isCancelled) {
-      setIsLoading(false)
-    }
+          setIsLoading(false)
+        }
       }
     }
 
@@ -59,7 +60,7 @@ export function useReferences(text: string, chatId: string) {
       isCancelled = true
       clearTimeout(timeoutId)
     }
-  }, [text, chatId])
+  }, [text, chatId, findReferences])
 
   return { references, isLoading, error }
 } 

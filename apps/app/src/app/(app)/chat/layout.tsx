@@ -1,14 +1,16 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useMutation } from "convex/react"
+import { api } from "@repo/backend/convex/_generated/api"
+import { Id } from "@repo/backend/convex/_generated/dataModel"
+import { useCurrentUser } from "@repo/auth/convex-hooks"
 import { Logo } from "@/components/ui/logo"
 import { NewChatMenu } from "@/components/chat/NewChatMenu"
 import { ChatList } from "@/components/chat/ChatList"
 import { UserMenu } from "@/components/chat/UserMenu"
 import { SettingsModal } from "@/components/chat/SettingsModal"
-import { api } from "@/lib/api/client"
-import { useGetProfileQuery } from "@/lib/redux/slices/apiSlice"
 import { toast } from "sonner"
 
 export default function ChatLayout({
@@ -20,22 +22,16 @@ export default function ChatLayout({
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const router = useRouter()
-  const { data: user, isLoading } = useGetProfileQuery()
-
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.push('/login')
-    }
-  }, [isLoading, user, router])
+  const { user, isAuthenticated } = useCurrentUser()
+  const createChat = useMutation(api.chats.create)
 
   const handleCreateChat = async (userIds: string[]) => {
     try {
-      const response = await api.post('/chats', {
-        memberIds: userIds,
+      const chatId = await createChat({
+        memberIds: userIds as Id<"users">[],
         type: userIds.length === 0 ? 'personal' : 'group'
       })
-      const chat = await response.json()
-      router.push(`/chat/${chat.data.id}`)
+      router.push(`/chat/${chatId}`)
       setIsMenuOpen(false)
     } catch (error) {
       console.error('Failed to create chat:', error)
@@ -44,7 +40,7 @@ export default function ChatLayout({
   }
 
   // Show loading state while checking auth
-  if (isLoading) {
+  if (user === undefined) {
     return (
       <div className="flex h-screen items-center justify-center bg-black text-white">
         <div className="text-sm font-extralight text-white/40">loading...</div>
@@ -73,9 +69,9 @@ export default function ChatLayout({
               onClick={() => setIsUserMenuOpen(true)}
               className="relative h-8 w-8 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden transition-transform hover:scale-105"
             >
-              {user.user_metadata?.avatar_url ? (
+              {user.avatarUrl ? (
                 <img
-                  src={user.user_metadata.avatar_url}
+                  src={user.avatarUrl}
                   alt={user.email || ""}
                   className="h-full w-full object-cover"
                 />

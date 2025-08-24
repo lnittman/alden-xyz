@@ -1,8 +1,0 @@
-{
-  "extends": "@squish-xyz/typescript-config/base.json",
-  "compilerOptions": {
-    "tsBuildInfoFile": ".cache/tsbuildinfo.json"
-  },
-  "include": ["."],
-  "exclude": ["node_modules"]
-}

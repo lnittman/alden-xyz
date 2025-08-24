@@ -6,8 +6,6 @@ import { cn } from "@/lib/utils"
 import { Chat } from "@/types"
 import { getChatGradient } from "@/lib/utils/colors"
 import { motion } from "framer-motion"
-import { useSelector } from "react-redux"
-import { RootState } from "@/lib/redux/store"
 
 interface ChatItemProps {
   chat: Chat & { has_unread?: boolean; chat_participants?: any[]; last_message?: any }
@@ -17,7 +15,6 @@ interface ChatItemProps {
 export function ChatItem({ chat, className }: ChatItemProps) {
   const router = useRouter()
   const params = useParams()
-  const currentUser = useSelector((state: RootState) => state.auth.user)
   const currentChatId = params?.id as string
 
   const getChatTitle = () => {

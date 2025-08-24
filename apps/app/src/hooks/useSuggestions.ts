@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { api } from "@/lib/api/client"
+import { useMutation } from "convex/react"
+import { api } from "@repo/backend/convex/_generated/api"
 import Fuse from 'fuse.js'
 import { ContextService } from "@/lib/ai/context"
 import type { Context, ContextType } from "@/types/ai/context"
@@ -94,21 +95,22 @@ export function useSuggestions(query: string, chatId: string, options: Suggestio
     }
   }, [query, chatId, options.type, options.limit, options.threshold])
 
+  const analyzeMessage = useMutation(api.ai.analyzeMessage)
+
   // Function for triggering deep analysis
   const triggerDeepAnalysis = async () => {
     if (!query.trim()) return
     
     setIsLoading(true)
     try {
-      const response = await api.post('/ai/analyze-message', {
+      const result = await analyzeMessage({
         content: query,
         chatId,
         mode: 'deep'
       })
       
-      const data = await response.json()
-      if (data?.suggestions) {
-        setSuggestions(data.suggestions)
+      if (result?.suggestions) {
+        setSuggestions(result.suggestions)
       }
     } catch (err) {
       console.error('Deep analysis error:', err)

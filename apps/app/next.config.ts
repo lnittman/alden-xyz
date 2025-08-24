@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   experimental: {
-    optimizePackageImports: ['@repo/design', '@repo/services', 'lucide-react', '@headlessui/react', '@heroicons/react'],
+    optimizePackageImports: ['@repo/design', '@repo/backend', 'lucide-react', '@headlessui/react', '@heroicons/react'],
   },
   reactStrictMode: true,
   images: {
@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  transpilePackages: ['@repo/design', '@repo/services', '@repo/database', '@repo/orpc', '@repo/auth', '@repo/ai', '@repo/analytics', '@repo/storage', '@repo/email'],
+  transpilePackages: ['@repo/design', '@repo/backend', '@repo/auth', '@repo/ai', '@repo/analytics', '@repo/email'],
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.

@@ -43,18 +43,8 @@
   },
   "packageManager": "bun@1.1.38",
   "dependencies": {
-    "@clerk/nextjs": "^6.31.1",
-    "@prisma/client": "^6.11.1",
-    "@tiptap/core": "^2.25.0",
-    "@tiptap/extension-image": "^2.25.0",
-    "@tiptap/extension-link": "^2.25.0",
-    "@tiptap/extension-mention": "^2.25.0",
-    "@tiptap/extension-placeholder": "^2.25.0",
-    "@tiptap/extension-underline": "^2.25.0",
-    "@tiptap/react": "^2.25.0",
-    "@tiptap/starter-kit": "^2.25.0",
-    "class-variance-authority": "^0.7.0",
-    "posthog-js": "^1.205.0"
+    "convex": "^1.26.1",
+    "convex-helpers": "^0.1.104"
   },
   "overrides": {
     "@types/react": "^19.0.6",

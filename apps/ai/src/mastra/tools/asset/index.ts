@@ -1,7 +1,7 @@
 // Asset Organization Tools
 // These tools provide AI-powered assistance for asset discovery, categorization, and organization
 
-export { searchAssetsTool } from './search-assets';
+// Note: searchAssetsTool removed - needs Convex integration
 export { categorizeAssetsTool } from './categorize-assets';
 export { findSimilarAssetsTool } from './find-similar-assets';
 export { generateAssetTagsTool } from './generate-asset-tags';

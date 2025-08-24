@@ -9,6 +9,8 @@
     "./server-types": "./server-types.ts",
     "./middleware": "./middleware.ts",
     "./provider": "./provider.tsx",
+    "./convex-provider": "./convex-provider.tsx",
+    "./convex-hooks": "./convex-hooks.ts",
     "./keys": "./keys.ts",
     "./utils": "./utils/index.ts",
     "./webhooks/clerk": "./webhooks/clerk.ts",
@@ -22,6 +24,9 @@
     "@clerk/elements": "^0.23.21",
     "@clerk/nextjs": "^6.18.4",
     "@clerk/themes": "^2.2.39",
+    "@repo/backend": "workspace:*",
+    "convex": "^1.18.3",
+    "convex-react-clerk": "npm:convex@^1.18.3",
     "lucide-react": "^0.539.0",
     "next-themes": "^0.4.6",
     "react": "^19.1.0"
@@ -33,8 +38,6 @@
     "@types/react-dom": "^19.0.3",
     "svix": "^1.44.0",
     "typescript": "^5.8.3",
-    "@repo/database": "workspace:*",
-    "@repo/logger": "workspace:*",
     "@repo/typescript-config": "workspace:*"
   }
 }

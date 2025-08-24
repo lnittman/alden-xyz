@@ -1,21 +1,11 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useState, useMemo } from "react"
 import { useRouter, useParams } from "next/navigation"
-import { api } from "@/lib/api/client"
-import { useDispatch, useSelector } from 'react-redux'
-import { 
-  setChats, 
-  updateChat, 
-  markChatAsRead,
-  setSearchQuery,
-  setFilterType,
-  selectPinnedChats,
-  selectRecentChats,
-  removeChat
-} from '@/lib/redux/slices/chatSlice'
+import { useQuery, useMutation } from "convex/react"
+import { api } from "@repo/backend/convex/_generated/api"
+import { Id } from "@repo/backend/convex/_generated/dataModel"
 import { cn } from "@/lib/utils"
-import { RootState } from '@/lib/redux/store'
 import { ChatSearch } from "./sidebar/ChatSearch"
 import { ChatFilters, ChatFilterType } from "./sidebar/ChatFilters"
 import { PinnedChats } from "./sidebar/PinnedChats"
@@ -23,89 +13,86 @@ import { ChatItem } from "./sidebar/ChatItem"
 import { AnimatePresence, motion } from "framer-motion"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useHotkeys } from "react-hotkeys-hook"
-import { useUser } from "@clerk/nextjs"
-import type { Chat } from '@/types/api/chat'
 
 interface ChatListProps {
   className?: string
 }
 
 export function ChatList({ className }: ChatListProps) {
-  const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
   const params = useParams()
-  const dispatch = useDispatch()
   const currentChatId = params?.id as string
 
-  // Get current user from Clerk
-  const { user } = useUser()
+  // Local state for filters
+  const [searchQuery, setSearchQuery] = useState("")
+  const [filterType, setFilterType] = useState<ChatFilterType>("all")
 
-  // Get filter state from Redux
-  const searchQuery = useSelector((state: RootState) => state.chat.filters.search)
-  const filterType = useSelector((state: RootState) => state.chat.filters.type)
-  const pinnedChats = useSelector(selectPinnedChats)
-  const recentChats = useSelector(selectRecentChats)
+  // Get chats from Convex - real-time updates automatically
+  const chats = useQuery(api.chats.list)
+  const markAsRead = useMutation(api.chats.markAsRead)
 
-  // Load initial chats
-  useEffect(() => {
-    if (!user) return
-    
-    api.get('/chats')
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          dispatch(setChats(data.data || []))
+  // Filter and organize chats
+  const { pinnedChats, recentChats } = useMemo(() => {
+    if (!chats) return { pinnedChats: [], recentChats: [] }
+
+    let filtered = [...chats]
+
+    // Apply search filter
+    if (searchQuery) {
+      filtered = filtered.filter(chat => 
+        chat.name?.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    }
+
+    // Apply type filter
+    if (filterType !== 'all') {
+      filtered = filtered.filter(chat => {
+        switch (filterType) {
+          case 'direct':
+            return chat.type === 'direct'
+          case 'group':
+            return chat.type === 'group'
+          case 'archived':
+            return chat.archived
+          case 'personal':
+            return chat.type === 'personal'
+          default:
+            return true
         }
-        setIsLoading(false)
       })
-      .catch(error => {
-        console.error('Failed to load chats:', error)
-        setIsLoading(false)
-      })
-  }, [dispatch, user])
+    }
 
-  // TODO: Implement real-time chat updates
-  // For now, we'll poll for updates or implement server-sent events
-  useEffect(() => {
-    if (!user) return
+    // Separate pinned and recent
+    const pinned = filtered.filter(chat => chat.pinned).sort((a, b) => 
+      (b.lastMessageAt || b._creationTime) - (a.lastMessageAt || a._creationTime)
+    )
+    const recent = filtered.filter(chat => !chat.pinned).sort((a, b) => 
+      (b.lastMessageAt || b._creationTime) - (a.lastMessageAt || a._creationTime)
+    )
 
-    // Refresh chats periodically to simulate real-time updates
-    const refreshInterval = setInterval(() => {
-      api.get('/chats')
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            dispatch(setChats(data.data || []))
-          }
-        })
-        .catch(console.error)
-    }, 30000) // Refresh every 30 seconds
-
-    return () => clearInterval(refreshInterval)
-  }, [dispatch, user])
+    return { pinnedChats: pinned, recentChats: recent }
+  }, [chats, searchQuery, filterType])
 
   // Handle chat click
   const handleChatClick = async (chatId: string) => {
     try {
-      // Update UI immediately
-      dispatch(markChatAsRead(chatId))
-      
-      // Navigate and update server
+      // Navigate
       router.push(`/chat/${chatId}`)
-      await api.patch(`/chats/${chatId}/read`, {})
+      // Mark as read
+      await markAsRead({ chatId: chatId as Id<"chats"> })
     } catch (error) {
       console.error('Failed to mark chat as read:', error)
-      // Revert the UI change if the API call failed
-      dispatch(updateChat({ id: chatId, has_unread: true }))
     }
   }
 
   // Keyboard shortcuts
   useHotkeys('esc', () => {
     if (searchQuery) {
-      dispatch(setSearchQuery(''))
+      setSearchQuery('')
     }
   })
+
+  const isLoading = chats === undefined
 
   if (isLoading) {
     return (
@@ -136,7 +123,7 @@ export function ChatList({ className }: ChatListProps) {
       <div className="px-4 pt-4 pb-2">
         <ChatSearch
           value={searchQuery}
-          onChange={(value) => dispatch(setSearchQuery(value))}
+          onChange={setSearchQuery}
         />
       </div>
 
@@ -145,7 +132,7 @@ export function ChatList({ className }: ChatListProps) {
         <div className="min-w-max">
           <ChatFilters
             value={filterType}
-            onChange={(value) => dispatch(setFilterType(value))}
+            onChange={setFilterType}
           />
         </div>
       </div>

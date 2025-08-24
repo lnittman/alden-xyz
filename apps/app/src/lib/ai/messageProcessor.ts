@@ -1,5 +1,9 @@
 import { AIService } from "./services"
-import { api } from "../api/client"
+import { ConvexClient } from "convex/browser"
+import { api } from "@repo/backend/convex/_generated/api"
+
+// Create a client for non-hook contexts
+const convexClient = new ConvexClient(process.env.NEXT_PUBLIC_CONVEX_URL!)
 
 interface ProcessOptions {
   chatId: string
@@ -45,7 +49,8 @@ export class MessageProcessor {
       })
 
       // 4. Store message with all metadata
-      const response = await api.post(`/chats/${chatId}/messages`, {
+      const message = await convexClient.mutation(api.messages.create, {
+        chatId,
         content,
         embedding: analysis.embedding,
         metadata: {
@@ -53,11 +58,9 @@ export class MessageProcessor {
           files: fileResults,
           references,
           contexts,
-          similar: similar.messages?.map(m => m.id) || []
+          similar: similar.messages?.map((m: any) => m.id) || []
         }
-      }, { token })
-
-      const message = await response.json()
+      })
 
       return {
         message,

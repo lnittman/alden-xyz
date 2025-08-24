@@ -9,12 +9,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { ChatMenu } from "./ChatMenu"
-import { api } from "@/lib/api/client"
+import { useMutation } from "convex/react"
+import { api } from "@repo/backend/convex/_generated/api"
+import { Id } from "@repo/backend/convex/_generated/dataModel"
 import { toast } from "sonner"
 import { generateChatName } from "@/lib/utils/chat-names"
-import { useDispatch, useSelector } from 'react-redux'
-import { updateChat } from '@/lib/redux/slices/chatSlice'
-import { RootState } from '@/lib/redux/store'
 import { AvatarButton } from "@/components/ui/avatar-button"
 import { Button } from "@/components/ui/button"
 
@@ -47,15 +46,12 @@ export function ChatHeader({
   isContextPanelOpen = false,
   onContextPanelToggle
 }: ChatHeaderProps) {
-  const dispatch = useDispatch()
-  const chat = useSelector((state: RootState) => 
-    state.chat.data.find(c => c.id === chatId)
-  )
+  const updateChat = useMutation(api.chats.update)
   const [isEditing, setIsEditing] = useState(false)
   const [editedTitle, setEditedTitle] = useState(title || '')
   const [isSaving, setIsSaving] = useState(false)
 
-  const currentTitle = chat?.title || title
+  const currentTitle = title
 
   const { displayTitle, subtitle } = React.useMemo(() => {
     if (type === 'personal') {
@@ -95,11 +91,10 @@ export function ChatHeader({
 
     setIsSaving(true)
     try {
-      await api.patch(`/chats/${chatId}`, { title: editedTitle.trim() })
-      dispatch(updateChat({ 
-        id: chatId, 
-        title: editedTitle.trim()
-      }))
+      await updateChat({ 
+        id: chatId as Id<"chats">, 
+        name: editedTitle.trim()
+      })
       toast.success('chat name updated')
     } catch (error) {
       console.error('Failed to update chat name:', error)
@@ -125,11 +120,10 @@ export function ChatHeader({
     setIsSaving(true)
     try {
       const newName = generateChatName()
-      await api.patch(`/chats/${chatId}`, { title: newName })
-      dispatch(updateChat({
-        id: chatId,
-        title: newName
-      }))
+      await updateChat({
+        id: chatId as Id<"chats">,
+        name: newName
+      })
       setEditedTitle(newName)
       setIsEditing(false)
       toast.success('chat name updated')
