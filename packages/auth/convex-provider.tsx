@@ -5,7 +5,6 @@ import { ConvexProviderWithClerk } from 'convex/react-clerk';
 import { ConvexReactClient } from 'convex/react';
 import { dark } from '@clerk/themes';
 import type { Theme } from '@clerk/types';
-import { useTheme } from 'next-themes';
 import type { ComponentProps, ReactNode } from 'react';
 
 // Initialize Convex client
@@ -23,10 +22,8 @@ export const ConvexAuthProvider = ({
   children,
   ...clerkProps
 }: ConvexAuthProviderProps) => {
-  const { resolvedTheme } = useTheme();
-
-  const isDark = resolvedTheme === 'dark';
-  const baseTheme = isDark ? dark : undefined;
+  // Always use dark theme for Alden's aesthetic
+  const baseTheme = dark;
 
   const elements: Theme['elements'] = {
     formButtonPrimary: 'bg-primary text-primary-foreground hover:bg-primary/90',

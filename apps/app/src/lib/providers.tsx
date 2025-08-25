@@ -2,11 +2,14 @@
 
 import { Toaster } from "sonner"
 import { ConvexClientProvider } from "@/components/common/convex-provider"
+import { RootLayoutContent } from "@/app/root-layout-content"
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ConvexClientProvider>
-      {children}
+      <RootLayoutContent>
+        {children}
+      </RootLayoutContent>
       <Toaster
         position="top-center"
         toastOptions={{
